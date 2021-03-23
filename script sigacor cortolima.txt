@@ -1,0 +1,57 @@
+CREATE TABLE [profiles] (
+  [id] int PRIMARY KEY IDENTITY(1, 1),
+  [user_id] nvarchar(255),
+  [rol_id] nvarchar(255),
+  [address] nvarchar(255),
+  [movil] int,
+  [state] nvarchar(255)
+)
+GO
+
+insert into profiles(user_id, rol_id, address, movil, state) values ('katherinne-silva','ADM', 'katherinne.silva@cortolima.gov.co', '3107712363',	'A');
+
+CREATE TABLE [menu] (
+  [name] nvarchar(255),
+  [icon] nvarchar(255),
+  [orden] int,
+  [state] nvarchar(255)
+)
+GO
+
+insert into menu(name, route,	icon, orden, state) values ('Parametrización',	'/Parametrizacion/Parametrizacion.aspx', 'fas fa-fw fa-cog', 1,	'A')
+
+CREATE TABLE [submenu] (
+  [menu] nvarchar(255),
+  [name] nvarchar(255),
+  [route] nvarchar(255),
+  [orden] int,
+  [state] nvarchar(255)
+)
+GO
+
+CREATE TABLE [estsubmenu] (
+  [name] nvarchar(255),
+  [submenu] nvarchar(255),
+  [rol] nvarchar(255),
+  [state] nvarchar(255)
+)
+GO
+
+CREATE TABLE [roles] (
+  [name] nvarchar(255),
+  [description] nvarchar(255),
+  [state] nvarchar(255)
+)
+GO
+
+insert into roles(name, description,	state) values ('ADM',	'ADMINISTRADOR',	'A');
+
+
+CREATE TABLE [states] (
+  [name] nvarchar(255),
+  [description] nvarchar(255)
+)
+GO
+
+insert into states(name, description) values ('A', 'Activo');
+insert into states(name, description) values ('I', 'Inactivo');

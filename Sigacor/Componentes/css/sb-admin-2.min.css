@@ -1768,12 +1768,18 @@ pre {
     .table th {
         padding: .75rem;
         vertical-align: top;
-        border-top: 1px solid #e3e6f0
+        /*border-top: 1px solid #e3e6f0*/
+        border-bottom: 1px solid #d1d3e2 !important;
+        border: 1px solid white;
     }
 
     .table thead th {
         vertical-align: bottom;
-        border-bottom: 2px solid #e3e6f0
+        border: 2px solid #ffffff00;
+        background: #f6db5e;
+        color: #183938;
+        border-radius: 16px;
+        box-shadow: 0px 2px 5px 0px #b7b9cc;        
     }
 
     .table tbody + tbody {

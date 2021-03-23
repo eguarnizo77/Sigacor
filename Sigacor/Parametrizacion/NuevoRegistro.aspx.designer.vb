@@ -68,40 +68,40 @@ Partial Public Class NuevoRegistro
     Protected WithEvents txtSlogan As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''Control TextBox1.
+    '''Control txtYearInicial.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents TextBox1 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtYearInicial As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''Control TextBox2.
+    '''Control txtCantYears.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents TextBox2 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtCantYears As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''Control TextBox3.
+    '''Control txtFecControl.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents TextBox3 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtFecControl As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''Control LinkButton3.
+    '''Control btnSigPac.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents LinkButton3 As Global.System.Web.UI.WebControls.LinkButton
+    Protected WithEvents btnSigPac As Global.System.Web.UI.WebControls.LinkButton
 
     '''<summary>
     '''Control pnlNiveles.
@@ -113,22 +113,130 @@ Partial Public Class NuevoRegistro
     Protected WithEvents pnlNiveles As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
-    '''Control TextBox4.
+    '''Control txtNombreNiv.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents TextBox4 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtNombreNiv As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''Control LinkButton1.
+    '''Control txtPesoNiv.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents LinkButton1 As Global.System.Web.UI.WebControls.LinkButton
+    Protected WithEvents txtPesoNiv As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control cmbEstadoNiv.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents cmbEstadoNiv As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''Control btnAgregar.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnAgregar As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''Control tblNiveles.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents tblNiveles As Global.System.Web.UI.WebControls.GridView
+
+    '''<summary>
+    '''Control btnAtrasNiveles.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnAtrasNiveles As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''Control btnSigNiveles.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnSigNiveles As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''Control pnlPlanAccion.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents pnlPlanAccion As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''Control cmbNiveles.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents cmbNiveles As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''Control txtNombrePlanAcc.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtNombrePlanAcc As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control txtPesoPlanAcc.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtPesoPlanAcc As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control cmbEstadoPlanAcc.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents cmbEstadoPlanAcc As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''Control btnAtrasPlanAcc.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnAtrasPlanAcc As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''Control btnSigPlanAcc.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnSigPlanAcc As Global.System.Web.UI.WebControls.LinkButton
 
     '''<summary>
     '''Control lblError.
