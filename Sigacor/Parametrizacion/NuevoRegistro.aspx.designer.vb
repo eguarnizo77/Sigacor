@@ -131,15 +131,6 @@ Partial Public Class NuevoRegistro
     Protected WithEvents txtPesoNiv As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''Control cmbEstadoNiv.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents cmbEstadoNiv As Global.System.Web.UI.WebControls.DropDownList
-
-    '''<summary>
     '''Control btnAgregar.
     '''</summary>
     '''<remarks>
@@ -194,6 +185,33 @@ Partial Public Class NuevoRegistro
     Protected WithEvents cmbNiveles As Global.System.Web.UI.WebControls.DropDownList
 
     '''<summary>
+    '''Control pnlSubNivel.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents pnlSubNivel As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+
+    '''<summary>
+    '''Control lblSubNivel.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblSubNivel As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control cmbSubNivel.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents cmbSubNivel As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
     '''Control txtNombrePlanAcc.
     '''</summary>
     '''<remarks>
@@ -212,13 +230,22 @@ Partial Public Class NuevoRegistro
     Protected WithEvents txtPesoPlanAcc As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''Control cmbEstadoPlanAcc.
+    '''Control btnAgregarPlanAcc.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents cmbEstadoPlanAcc As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents btnAgregarPlanAcc As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''Control tblPlanAccion.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents tblPlanAccion As Global.System.Web.UI.WebControls.GridView
 
     '''<summary>
     '''Control btnAtrasPlanAcc.
@@ -237,6 +264,15 @@ Partial Public Class NuevoRegistro
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents btnSigPlanAcc As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''Control btnGrabar.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnGrabar As Global.System.Web.UI.WebControls.LinkButton
 
     '''<summary>
     '''Control lblError.

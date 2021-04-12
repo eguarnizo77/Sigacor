@@ -4,37 +4,88 @@
     Dim parametrizacion As New clParametrizacion
     Dim fun As New Funciones
 
-#Region "Click"
+#Region "Load"
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
             pnlPac.Visible = True
             pestaña(1)
+            pnlSubNivel.Visible = False
             pnlNiveles.Visible = False
             pnlPlanAccion.Visible = False
             lblError.Visible = False
-            Dim dt As New DataTable
-
-            dt.Columns.Add("id")
-            dt.Columns.Add("name")
-            dt.Columns.Add("weigth")
-            dt.Columns.Add("state")
-            Session("dataNiveles") = dt
-
-
-            cmbEstadoNiv.Items.Clear()
-            cmbEstadoNiv.DataTextField = "description"
-            cmbEstadoNiv.DataValueField = "name"
-            cmbEstadoNiv.DataSource = fun.states()
-            cmbEstadoNiv.DataBind()
-            cmbEstadoNiv.Items.Insert(0, New ListItem("---Seleccione---", ""))
-
-
-
         End If
+
         If tblNiveles.Rows.Count > 0 Then
             tblNiveles.UseAccessibleHeader = True
             tblNiveles.HeaderRow.TableSection = TableRowSection.TableHeader
         End If
+        If tblPlanAccion.Rows.Count > 0 Then
+            tblPlanAccion.UseAccessibleHeader = True
+            tblPlanAccion.HeaderRow.TableSection = TableRowSection.TableHeader
+        End If
+    End Sub
+
+#End Region
+
+#Region "SelectedIndexChanged"
+    Private Sub cmbNiveles_SelectedIndexChsanged(sender As Object, e As EventArgs) Handles cmbNiveles.SelectedIndexChanged
+        Try
+            If cmbNiveles.SelectedValue = "1" Then
+                pnlSubNivel.Visible = False
+                cmbSubNivel.Items.Clear()
+            Else
+                DataT = Nothing
+                DataT = parametrizacion.selectJerarquia(CInt(cmbNiveles.SelectedValue.Trim) - 1)
+                If DataT IsNot Nothing Then
+                    lblSubNivel.Text = DataT(0)(4)
+                    pnlSubNivel.Visible = True
+                    cmbSubNivel.Items.Clear()
+                    cmbSubNivel.DataTextField = "name"
+                    cmbSubNivel.DataValueField = "code"
+                    cmbSubNivel.DataSource = DataT
+                    cmbSubNivel.DataBind()
+                    cmbSubNivel.Items.Insert(0, New ListItem("---Seleccione---", ""))
+                End If
+
+            End If
+
+        Catch ex As Exception
+            lblError.Text = ex.Message
+        End Try
+    End Sub
+
+#End Region
+
+#Region "Click"
+
+    Private Sub btnGrabar_Click(sender As Object, e As EventArgs) Handles btnGrabar.Click
+        Try
+            Dim pac, idTracing As Integer
+            Dim array As String
+            If tblPlanAccion.Rows.Count = 0 Then
+                alerta("Advertencia", "Ingrese la parametrización de plan de acción cuatrienal", "info", "")
+                Exit Sub
+            End If
+
+            parametrizacion.insertPac(txtNomPac.Text.Trim, txtSlogan.Text.Trim, txtYearInicial.Text.Trim,
+                                      CDate(txtFecControl.Text.Trim).ToString("yyyy"), txtCantYears.Text.Trim,
+                                      "A")
+            pac = parametrizacion.consecutivoPac
+            For Each row As GridViewRow In tblNiveles.Rows
+                parametrizacion.insertLevels(row.Cells(1).Text.Trim, pac, row.Cells(0).Text.Trim,
+                                             row.Cells(2).Text.Trim, "A")
+            Next
+            For Each row As GridViewRow In tblPlanAccion.Rows
+                array = ""
+                parametrizacion.insertTracing(row.Cells(1).Text.Trim, pac)
+            Next
+
+            alerta("Se ha creado la parametrización correctamente", "Pac: " & pac, "success", "")
+            limpiarForm()
+
+        Catch ex As Exception
+            lblError.Text = ex.Message
+        End Try
     End Sub
 
     Private Sub btnPac_Click(sender As Object, e As EventArgs) Handles btnPac.Click
@@ -97,14 +148,6 @@
     End Sub
     Private Sub btnSigNiveles_Click(sender As Object, e As EventArgs) Handles btnSigNiveles.Click
         Try
-            'If txtNombreNiv.Text = String.Empty Then
-            '    alerta("Advertencia", "Ingrese el nombre del nivel", "info", "contenedor2_txtNombreNiv")
-            '    Exit Sub
-            'End If
-            'If txtPesoNiv.Text = String.Empty Then
-            '    alerta("Advertencia", "Ingrese el peso del nivel", "info", "contenedor2_txtPesoNiv")
-            '    Exit Sub
-            'End If
             If tblNiveles.Rows.Count = 0 Then
                 alerta("Advertencia", "Ingrese un nivel", "info", "")
                 Exit Sub
@@ -114,6 +157,16 @@
             pnlPac.Visible = False
             pnlNiveles.Visible = False
             pnlPlanAccion.Visible = True
+
+            parametrizacion.deleteJerarquia()
+
+            cmbNiveles.Items.Clear()
+            cmbNiveles.DataTextField = "name"
+            cmbNiveles.DataValueField = "id"
+            cmbNiveles.DataSource = Session("dtNiveles")
+            cmbNiveles.DataBind()
+            cmbNiveles.Items.Insert(0, New ListItem("---Seleccione---", ""))
+
         Catch ex As Exception
             lblError.Text = ex.Message
         End Try
@@ -138,12 +191,16 @@
             lblError.Text = ex.Message
         End Try
     End Sub
-
+    Private Sub btnSigPlanAcc_Click(sender As Object, e As EventArgs) Handles btnSigPlanAcc.Click
+        ScriptManager.RegisterStartupScript(Me, GetType(Page), "alertaSN", "AlertaSN();", True)
+    End Sub
     Private Sub btnAgregar_Click(sender As Object, e As EventArgs) Handles btnAgregar.Click
         Try
             Dim dt As New DataTable
-            dt = Session("dataNiveles")
-            Dim row As DataRow = dt.NewRow()
+            dt.Columns.Add("id")
+            dt.Columns.Add("name")
+            dt.Columns.Add("weigth")
+            Dim row As DataRow
 
             If txtNombreNiv.Text = String.Empty Then
                 alerta("Advertencia", "Ingrese el nombre del nivel", "info", "contenedor2_txtNombreNiv")
@@ -153,40 +210,143 @@
                 alerta("Advertencia", "Ingrese el peso del nivel", "info", "contenedor2_txtPesoNiv")
                 Exit Sub
             End If
-            If cmbEstadoNiv.SelectedIndex = 0 Then
-                alerta("Advertencia", "Seleccione el estado del nivel", "info", "contenedor2_cmbEstadoNiv")
-                Exit Sub
-            End If
 
-            If dt.Rows.Count > 0 Then
-                Dim i As Integer = 1
-                For Each fila As DataRow In dt.Rows
-                    row("id") = i
-                    row("name") = row("name")
-                    row("weigth") = row("weigth")
-                    row("state") = row("state")
-                    i = i + 1
-                Next
+            Dim i As Integer = 1
+            For Each fila As GridViewRow In tblNiveles.Rows
+                row = dt.NewRow()
                 row("id") = i
-                row("name") = txtNombreNiv.Text.Trim
-                row("weigth") = txtPesoNiv.Text.Trim
-                row("state") = cmbEstadoNiv.SelectedValue
+                row("name") = fila.Cells(1).Text.Trim
+                row("weigth") = fila.Cells(2).Text.Trim
+                i = i + 1
                 dt.Rows.Add(row)
-            Else
-                row("id") = "1"
-                row("name") = txtNombreNiv.Text.Trim
-                row("weigth") = txtPesoNiv.Text.Trim
-                row("state") = cmbEstadoNiv.SelectedValue
-                dt.Rows.Add(row)
-            End If
+            Next
+            row = dt.NewRow()
+            row("id") = i
+            row("name") = txtNombreNiv.Text.Trim
+            row("weigth") = txtPesoNiv.Text.Trim
+            dt.Rows.Add(row)
+
+            Dim valores(dt.Rows.Count) As Integer
+            Session("valores") = valores
+            Session("niveles") = valores
+            tblPlanAccion.DataSource = Nothing
+            tblPlanAccion.DataBind()
 
             txtNombreNiv.Text = String.Empty
             txtPesoNiv.Text = String.Empty
+            Session("dtNiveles") = dt
 
             tblNiveles.DataSource = dt
             tblNiveles.DataBind()
             tblNiveles.UseAccessibleHeader = True
             tblNiveles.HeaderRow.TableSection = TableRowSection.TableHeader
+
+        Catch ex As Exception
+            lblError.Text = ex.Message
+        End Try
+    End Sub
+
+    Private Sub btnAgregarPlanAcc_Click(sender As Object, e As EventArgs) Handles btnAgregarPlanAcc.Click
+        Try
+            Dim dt As New DataTable
+            Dim dt2 As New DataTable
+            dt.Columns.Add("nivel")
+            dt.Columns.Add("hierarchy")
+            dt.Columns.Add("name")
+            dt.Columns.Add("weigth")
+            Dim row As DataRow
+
+            If cmbNiveles.SelectedIndex = 0 Then
+                alerta("Advertencia", "Seleccione un nivel", "info", "contenedor2_cmbNiveles")
+                Exit Sub
+            End If
+            If txtNombrePlanAcc.Text = String.Empty Then
+                alerta("Advertencia", "Ingrese el nombre", "info", "contenedor2_txtNombrePlanAcc")
+                Exit Sub
+            End If
+            If txtPesoPlanAcc.Text = String.Empty Then
+                alerta("Advertencia", "Ingrese el peso", "info", "contenedor2_txtPesoPlanAcc")
+                Exit Sub
+            End If
+
+            Dim i As Integer = 0
+            dt2 = Session("dtNiveles")
+
+            i = 0
+            For Each fila As GridViewRow In tblPlanAccion.Rows
+                row = dt.NewRow()
+                row("hierarchy") = fila.Cells(1).Text.Trim
+                row("nivel") = fila.Cells(0).Text.Trim
+                row("name") = fila.Cells(2).Text.Trim
+                row("weigth") = fila.Cells(3).Text.Trim
+                dt.Rows.Add(row)
+            Next
+
+            Dim subNivel, name As String
+            If cmbSubNivel.Items.Count > 0 Then
+                subNivel = cmbSubNivel.SelectedValue.Trim
+                name = cmbSubNivel.SelectedItem.ToString.Trim
+            Else
+                subNivel = String.Empty
+            End If
+
+            Dim value, code, jerarquia As String
+            DataT = Nothing
+            DataT = parametrizacion.selectJerarquia(cmbNiveles.SelectedValue.Trim, subNivel)
+            If DataT.Rows.Count > 0 Then
+                For Each dr As DataRow In DataT.Rows
+                    'value = CInt(dr("value")) + 1
+                    code = dr("code")
+                    code = code.Substring(code.Length - 1)
+                    value = CInt(code) + 1
+                    If dr("code").Length = 1 Then
+                        code = value
+                    Else
+                        code = Mid(dr("code"), 1, Len(dr("code")) - 1) & value
+                    End If
+                    value = 0
+                    'code = value
+                    jerarquia = code
+                    Exit For
+                Next
+            Else
+                DataT = parametrizacion.selectJerarquia(cmbNiveles.SelectedValue.Trim - 1, "", subNivel)
+                If DataT.Rows.Count > 0 Then
+                    value = "1"
+                    If cmbSubNivel.SelectedValue = String.Empty Then
+                        code = DataT(0)(5)
+                    Else
+                        code = DataT(0)(5) & "." & value
+                    End If
+                    jerarquia = code
+                Else
+                    code = "1"
+                    value = "0"
+                    jerarquia = "1"
+                End If
+
+            End If
+
+            parametrizacion.insertJerarquia(cmbNiveles.SelectedValue, subNivel, txtNombrePlanAcc.Text.Trim,
+                                            value, cmbNiveles.SelectedItem.ToString.Trim, code)
+
+            row = dt.NewRow()
+            row("nivel") = cmbNiveles.SelectedValue
+            row("name") = txtNombrePlanAcc.Text.Trim
+            row("weigth") = txtPesoPlanAcc.Text.Trim
+            row("hierarchy") = jerarquia
+
+
+            'row("hierarchy") = valores(i)
+            dt.Rows.Add(row)
+
+            txtNombrePlanAcc.Text = String.Empty
+            txtPesoPlanAcc.Text = String.Empty
+
+            Session("dtPlanAccional") = dt
+            tblPlanAccion.DataSource = dt
+            tblPlanAccion.DataBind()
+            tblPlanAccion.HeaderRow.TableSection = TableRowSection.TableHeader
 
         Catch ex As Exception
             lblError.Text = ex.Message
@@ -224,10 +384,35 @@
         End Select
     End Sub
 
-    Private Sub tblNiveles_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles tblNiveles.RowDataBound
-        If e.Row.RowType = DataControlRowType.Header Then
-            e.Row.Cells(3).Visible = False
-        End If
+    Public Sub limpiarForm()
+        Try
+            txtNomPac.Text = String.Empty
+            txtSlogan.Text = String.Empty
+            txtYearInicial.Text = String.Empty
+            txtCantYears.Text = String.Empty
+            txtFecControl.Text = String.Empty
+            txtNombreNiv.Text = String.Empty
+            txtPesoNiv.Text = String.Empty
+            tblNiveles.DataSource = Nothing
+            tblNiveles.DataBind()
+            cmbNiveles.Items.Clear()
+            txtNombrePlanAcc.Text = String.Empty
+            txtPesoPlanAcc.Text = String.Empty
+            tblPlanAccion.DataSource = Nothing
+            tblPlanAccion.DataBind()
+
+            pnlPac.Visible = True
+            pestaña(1)
+            pnlNiveles.Visible = False
+            pnlPlanAccion.Visible = False
+            lblError.Text = String.Empty
+            lblError.Visible = False
+
+            Session("valores") = Nothing
+            Session("niveles") = Nothing
+        Catch ex As Exception
+            lblError.Text = ex.Message
+        End Try
     End Sub
 
 #End Region
