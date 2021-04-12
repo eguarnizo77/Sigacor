@@ -36,8 +36,8 @@
             Else
                 DataT = Nothing
                 DataT = parametrizacion.selectJerarquia(CInt(cmbNiveles.SelectedValue.Trim) - 1)
-                If DataT IsNot Nothing Then
-                    lblSubNivel.Text = DataT(0)(4)
+                If DataT.Rows.Count > 0 Then
+                    lblSubNivel.Text = DataT(0)(1)
                     pnlSubNivel.Visible = True
                     cmbSubNivel.Items.Clear()
                     cmbSubNivel.DataTextField = "name"
@@ -45,8 +45,10 @@
                     cmbSubNivel.DataSource = DataT
                     cmbSubNivel.DataBind()
                     cmbSubNivel.Items.Insert(0, New ListItem("---Seleccione---", ""))
+                    cmbSubNivel.Focus()
+                Else
+                    txtNombrePlanAcc.Focus()
                 End If
-
             End If
 
         Catch ex As Exception
@@ -60,8 +62,8 @@
 
     Private Sub btnGrabar_Click(sender As Object, e As EventArgs) Handles btnGrabar.Click
         Try
-            Dim pac, idTracing As Integer
-            Dim array As String
+            Dim pac As Integer
+
             If tblPlanAccion.Rows.Count = 0 Then
                 alerta("Advertencia", "Ingrese la parametrización de plan de acción cuatrienal", "info", "")
                 Exit Sub
@@ -75,10 +77,16 @@
                 parametrizacion.insertLevels(row.Cells(1).Text.Trim, pac, row.Cells(0).Text.Trim,
                                              row.Cells(2).Text.Trim, "A")
             Next
-            For Each row As GridViewRow In tblPlanAccion.Rows
-                array = ""
-                parametrizacion.insertTracing(row.Cells(1).Text.Trim, pac)
-            Next
+            DataT = Nothing
+            DataT = parametrizacion.selectJerarquia()
+            If DataT.Rows.Count > 0 Then
+                For Each row As DataRow In DataT.Rows
+                    parametrizacion.insertContents(pac, row("level"), row("code"), row("namelevel"), row("sublevel"),
+                                                   row("name"), row("weigth"), "A")
+                Next
+            End If
+
+            parametrizacion.deleteJerarquia()
 
             alerta("Se ha creado la parametrización correctamente", "Pac: " & pac, "success", "")
             limpiarForm()
@@ -226,9 +234,6 @@
             row("weigth") = txtPesoNiv.Text.Trim
             dt.Rows.Add(row)
 
-            Dim valores(dt.Rows.Count) As Integer
-            Session("valores") = valores
-            Session("niveles") = valores
             tblPlanAccion.DataSource = Nothing
             tblPlanAccion.DataBind()
 
@@ -314,9 +319,9 @@
                 If DataT.Rows.Count > 0 Then
                     value = "1"
                     If cmbSubNivel.SelectedValue = String.Empty Then
-                        code = DataT(0)(5)
+                        code = DataT(0)(4)
                     Else
-                        code = DataT(0)(5) & "." & value
+                        code = DataT(0)(4) & "." & value
                     End If
                     jerarquia = code
                 Else
@@ -328,16 +333,13 @@
             End If
 
             parametrizacion.insertJerarquia(cmbNiveles.SelectedValue, subNivel, txtNombrePlanAcc.Text.Trim,
-                                            value, cmbNiveles.SelectedItem.ToString.Trim, code)
+                                            cmbNiveles.SelectedItem.ToString.Trim, code, txtPesoPlanAcc.Text.Trim)
 
             row = dt.NewRow()
             row("nivel") = cmbNiveles.SelectedValue
             row("name") = txtNombrePlanAcc.Text.Trim
             row("weigth") = txtPesoPlanAcc.Text.Trim
             row("hierarchy") = jerarquia
-
-
-            'row("hierarchy") = valores(i)
             dt.Rows.Add(row)
 
             txtNombrePlanAcc.Text = String.Empty
@@ -396,6 +398,7 @@
             tblNiveles.DataSource = Nothing
             tblNiveles.DataBind()
             cmbNiveles.Items.Clear()
+            cmbSubNivel.Items.Clear()
             txtNombrePlanAcc.Text = String.Empty
             txtPesoPlanAcc.Text = String.Empty
             tblPlanAccion.DataSource = Nothing
@@ -408,7 +411,9 @@
             lblError.Text = String.Empty
             lblError.Visible = False
 
-            Session("valores") = Nothing
+
+            pnlSubNivel.Visible = False
+
             Session("niveles") = Nothing
         Catch ex As Exception
             lblError.Text = ex.Message

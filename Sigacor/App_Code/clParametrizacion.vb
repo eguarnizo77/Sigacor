@@ -85,11 +85,21 @@ Public Class clParametrizacion
         Return Data.OpenData(QRY)
     End Function
     Public Function insertJerarquia(ByVal level As String, ByVal sublevel As String, ByVal name As String,
-                                    ByVal value As String, ByVal namelevel As String, ByVal code As String) As Integer
+                                    ByVal namelevel As String, ByVal code As String, ByVal weigth As String) As Integer
 
-        QRY = "insert into jerarquia (level, sublevel, name, value, namelevel, code) values ( " &
-              "'" & level & "', '" & sublevel & "', '" & name & "', " & value & ", " &
-              "'" & namelevel & "', '" & code & "' )"
+        QRY = "insert into jerarquia (level, sublevel, name, namelevel, code, weigth ) values ( " &
+              "'" & level & "', '" & sublevel & "', '" & name & "', '" & namelevel & "', '" & code & "', " & weigth & " )"
+
+        Return Data.Execute(QRY)
+    End Function
+
+    Public Function insertContents(ByVal pac_id As String, ByVal level_id As String, ByVal code As String,
+                                   ByVal name_level As String, ByVal sublevel As String, ByVal name As String,
+                                   ByVal weigth As String, ByVal state As String) As Integer
+
+        QRY = "insert into contents (pac_id, level_id, code, name_level, sublevel, name, weigth, state) values ( " &
+              "" & pac_id & ", " & level_id & ", '" & code & "', '" & name_level & "', '" & sublevel & "', " &
+              "'" & name & "', " & weigth & ",  '" & state & "') "
 
         Return Data.Execute(QRY)
     End Function
