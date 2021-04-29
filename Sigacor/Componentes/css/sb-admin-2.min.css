@@ -773,7 +773,9 @@ pre {
 
 .col-6 {
     flex: 0 0 50%;
-    max-width: 50%
+    max-width: 50%;
+    top: -1px;
+    left: 1px;
 }
 
 .col-7 {
@@ -5310,8 +5312,8 @@ input[type=submit].btn-block {
 .page-item.active .page-link {
     z-index: 3;
     color: #fff;
-    background-color: #4e73df;
-    border-color: #4e73df
+    background-color: #f6db5e;  
+    /*border-color: #4e73df*/
 }
 
 .page-item.disabled .page-link {
@@ -12629,4 +12631,8 @@ body.sidebar-toggled footer.sticky-footer {
 .nav-link-Curvo {
     box-shadow: -5px 2px 5px #5C588B !important;
     border-radius: 3px;
+}
+.lblModal {
+    color: #337270;
+    font-weight: 700;
 }

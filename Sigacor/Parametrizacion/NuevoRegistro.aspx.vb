@@ -13,6 +13,15 @@
             pnlNiveles.Visible = False
             pnlPlanAccion.Visible = False
             lblError.Visible = False
+
+            btnActPac.Visible = False
+            'btnActNiv.Visible = False
+            btnSigPlanAcc.Visible = False
+
+            visualizarPac(Session("id_pac"))
+            Session("id_pac") = Nothing
+            Session("pac") = Nothing
+
         End If
 
         If tblNiveles.Rows.Count > 0 Then
@@ -27,6 +36,19 @@
 
 #End Region
 
+#Region "TextChanged"
+    Private Sub txtYearInicial_TextChanged(sender As Object, e As EventArgs) Handles txtYearInicial.TextChanged
+        calcularYearFinal()
+        txtCantYears.Focus()
+    End Sub
+
+    Private Sub txtCantYears_TextChanged(sender As Object, e As EventArgs) Handles txtCantYears.TextChanged
+        calcularYearFinal()
+        txtYearFinal.Focus()
+    End Sub
+
+#End Region
+
 #Region "SelectedIndexChanged"
     Private Sub cmbNiveles_SelectedIndexChsanged(sender As Object, e As EventArgs) Handles cmbNiveles.SelectedIndexChanged
         Try
@@ -35,9 +57,9 @@
                 cmbSubNivel.Items.Clear()
             Else
                 DataT = Nothing
-                DataT = parametrizacion.selectJerarquia(CInt(cmbNiveles.SelectedValue.Trim) - 1)
+                DataT = parametrizacion.selectContents(lblPac.Text.Trim, CInt(cmbNiveles.SelectedValue.Trim) - 1, "", "")
                 If DataT.Rows.Count > 0 Then
-                    lblSubNivel.Text = DataT(0)(1)
+                    lblSubNivel.Text = "¿A que " & DataT(0)(4) & " pertenece?"
                     pnlSubNivel.Visible = True
                     cmbSubNivel.Items.Clear()
                     cmbSubNivel.DataTextField = "name"
@@ -50,9 +72,228 @@
                     txtNombrePlanAcc.Focus()
                 End If
             End If
+            lblCodigo.Text = "Código de " & cmbNiveles.SelectedItem.ToString
+            lblNombre.Text = "Nombre de " & cmbNiveles.SelectedItem.ToString
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
+
+#End Region
+
+#Region "RowDataBound"
+    Private Sub tblPlanAccion_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles tblPlanAccion.RowDataBound
+        Try
+            If e.Row.RowType = DataControlRowType.DataRow Then
+                e.Row.Cells(0).Visible = False
+                e.Row.Cells(3).Visible = False
+                e.Row.Cells(5).Visible = False
+                e.Row.Cells(7).Visible = False
+
+                Dim linkBtnEditar, linkBtnEliminar, linkBtnConfirmar As New LinkButton
+                linkBtnEditar = e.Row.FindControl("lnkEditPlanAcc")
+                linkBtnEliminar = e.Row.FindControl("lnkEliPlanAcc")
+                linkBtnConfirmar = e.Row.FindControl("lnkConEditPlanAcc")
+
+                linkBtnEditar.CommandArgument = e.Row.Cells(0).Text.Trim
+                linkBtnEliminar.CommandArgument = e.Row.Cells(0).Text.Trim
+
+                linkBtnConfirmar.Visible = False
+
+            End If
+            If e.Row.RowType = DataControlRowType.Header Then
+                e.Row.Cells(0).Visible = False
+                e.Row.Cells(3).Visible = False
+                e.Row.Cells(5).Visible = False
+                e.Row.Cells(7).Visible = False
+            End If
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
+
+    Private Sub tblNiveles_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles tblNiveles.RowDataBound
+        Try
+            If e.Row.RowType = DataControlRowType.DataRow Then
+                e.Row.Cells(0).Visible = False
+                e.Row.Cells(2).Visible = False
+                e.Row.Cells(4).Visible = False
+
+                Dim linkBtnEditar, linkBtnEliminar, linkBtnConfirmar As New LinkButton
+                linkBtnEditar = e.Row.FindControl("lnkEditNiv")
+                linkBtnEliminar = e.Row.FindControl("lnkEliNiv")
+                linkBtnConfirmar = e.Row.FindControl("lnkConEdit")
+
+                linkBtnEditar.CommandArgument = e.Row.Cells(0).Text.Trim
+                linkBtnEliminar.CommandArgument = e.Row.Cells(0).Text.Trim
+
+                linkBtnConfirmar.Visible = False
+
+            End If
+            If e.Row.RowType = DataControlRowType.Header Then
+                e.Row.Cells(0).Visible = False
+                e.Row.Cells(2).Visible = False
+                e.Row.Cells(4).Visible = False
+            End If
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
+
+#End Region
+
+#Region "RowCommand"
+    Private Sub tblNiveles_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles tblNiveles.RowCommand
+        Try
+
+            Dim linkBtnConfirmar, linkBtnEditar, linkBtnEliminar As New LinkButton
+            Dim codigo, nombre As TextBox
+
+            If e.CommandName = "Editar" Then
+                For Each row As GridViewRow In tblNiveles.Rows
+
+                    linkBtnConfirmar = tblNiveles.Rows(row.RowIndex).FindControl("lnkConEdit")
+                    linkBtnEditar = tblNiveles.Rows(row.RowIndex).FindControl("lnkEditNiv")
+                    linkBtnEliminar = tblNiveles.Rows(row.RowIndex).FindControl("lnkEliNiv")
+
+                    codigo = tblNiveles.Rows(row.RowIndex).FindControl("txtCodigo")
+                    nombre = tblNiveles.Rows(row.RowIndex).FindControl("txtNombre")
+
+                    If e.CommandArgument = row.Cells(0).Text Then
+
+                        linkBtnEditar.Visible = False
+                        linkBtnConfirmar.Visible = True
+                        linkBtnEliminar.Visible = False
+
+                        codigo.Text = row.Cells(1).Text.Trim
+                        nombre.Text = row.Cells(3).Text.Trim
+
+                        row.Cells(1).Visible = False
+                        row.Cells(2).Visible = True
+
+                        row.Cells(3).Visible = False
+                        row.Cells(4).Visible = True
+
+
+                    Else
+                        linkBtnEditar.Visible = False
+                        linkBtnEliminar.Visible = False
+                    End If
+                Next
+
+            ElseIf e.CommandName = "Confirmar" Then
+
+                For Each row As GridViewRow In tblNiveles.Rows
+                    codigo = tblNiveles.Rows(row.RowIndex).FindControl("txtCodigo")
+                    nombre = tblNiveles.Rows(row.RowIndex).FindControl("txtNombre")
+
+                    If row.Cells(2).Visible = True Then
+                        If codigo.Text = String.Empty Then
+                            alerta("Advertencia", "Ingrese el código del nivel", "info")
+                            Exit Sub
+                        End If
+                        If nombre.Text = String.Empty Then
+                            alerta("Advertencia", "Ingrese el nombre del nivel", "info")
+                            Exit Sub
+                        End If
+                        parametrizacion.updateLevels(row.Cells(0).Text.Trim, nombre.Text.Trim, codigo.Text.Trim, "A")
+                    End If
+                Next
+
+                cargarNiveles(lblPac.Text.Trim)
+                alerta("Se ha actualizado el nivel correctamente", "", "success")
+
+            ElseIf e.CommandName = "Eliminar" Then
+                ScriptManager.RegisterStartupScript(Me, GetType(Page), "alertaNivel", "AlertaEliminacionNivel();", True)
+                Session("idNivel") = e.CommandArgument
+            End If
 
         Catch ex As Exception
             lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
+
+    Private Sub tblPlanAccion_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles tblPlanAccion.RowCommand
+        Try
+
+            Dim linkBtnConfirmar, linkBtnEditar, linkBtnEliminar As New LinkButton
+            Dim jerarquia, nombre, peso As TextBox
+
+            If e.CommandName = "Editar" Then
+                For Each row As GridViewRow In tblPlanAccion.Rows
+
+                    linkBtnConfirmar = tblPlanAccion.Rows(row.RowIndex).FindControl("lnkConEditPlanAcc")
+                    linkBtnEditar = tblPlanAccion.Rows(row.RowIndex).FindControl("lnkEditPlanAcc")
+                    linkBtnEliminar = tblPlanAccion.Rows(row.RowIndex).FindControl("lnkEliPlanAcc")
+
+                    jerarquia = tblPlanAccion.Rows(row.RowIndex).FindControl("txtJerarquia")
+                    nombre = tblPlanAccion.Rows(row.RowIndex).FindControl("txtNombrePlanAcc")
+                    peso = tblPlanAccion.Rows(row.RowIndex).FindControl("txtPeso")
+
+                    If e.CommandArgument = row.Cells(0).Text Then
+
+                        linkBtnEditar.Visible = False
+                        linkBtnConfirmar.Visible = True
+                        linkBtnEliminar.Visible = False
+
+                        jerarquia.Text = row.Cells(2).Text.Trim
+                        nombre.Text = row.Cells(4).Text.Trim
+                        peso.Text = row.Cells(6).Text.Trim
+
+                        row.Cells(2).Visible = False
+                        row.Cells(3).Visible = True
+
+                        row.Cells(4).Visible = False
+                        row.Cells(5).Visible = True
+
+                        row.Cells(6).Visible = False
+                        row.Cells(7).Visible = True
+                    Else
+                        linkBtnEditar.Visible = False
+                        linkBtnEliminar.Visible = False
+                    End If
+                Next
+
+            ElseIf e.CommandName = "Confirmar" Then
+
+                For Each row As GridViewRow In tblPlanAccion.Rows
+                    jerarquia = tblPlanAccion.Rows(row.RowIndex).FindControl("txtJerarquia")
+                    nombre = tblPlanAccion.Rows(row.RowIndex).FindControl("txtNombrePlanAcc")
+                    peso = tblPlanAccion.Rows(row.RowIndex).FindControl("txtPeso")
+
+                    If row.Cells(3).Visible = True Then
+                        If jerarquia.Text = String.Empty Then
+                            alerta("Advertencia", "Ingrese el código de la jerarquia", "info")
+                            Exit Sub
+                        End If
+                        If nombre.Text = String.Empty Then
+                            alerta("Advertencia", "Ingrese el nombre del plan de acción cuatrienal", "info")
+                            Exit Sub
+                        End If
+                        If peso.Text = String.Empty Then
+                            alerta("Advertencia", "Ingrese el peso del plan de acción cuatrienal", "info")
+                            Exit Sub
+                        End If
+                        parametrizacion.updateContents(row.Cells(0).Text.Trim, jerarquia.Text.Trim, nombre.Text.Trim, peso.Text.Trim)
+                        Exit For
+                    End If
+                Next
+
+                cargarPlanAccion(lblPac.Text.Trim)
+                alerta("Se ha actualizado el plan de acción cuatrienal correctamente", "", "success")
+
+            ElseIf e.CommandName = "Eliminar" Then
+                ScriptManager.RegisterStartupScript(Me, GetType(Page), "alertaPlanAcc", "AlertaEliminacionPlanAcc();", True)
+                Session("idPlanAcc") = e.CommandArgument
+            End If
+
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
         End Try
     End Sub
 
@@ -60,67 +301,58 @@
 
 #Region "Click"
 
-    Private Sub btnGrabar_Click(sender As Object, e As EventArgs) Handles btnGrabar.Click
-        Try
-            Dim pac As Integer
-
-            If tblPlanAccion.Rows.Count = 0 Then
-                alerta("Advertencia", "Ingrese la parametrización de plan de acción cuatrienal", "info", "")
-                Exit Sub
-            End If
-
-            parametrizacion.insertPac(txtNomPac.Text.Trim, txtSlogan.Text.Trim, txtYearInicial.Text.Trim,
-                                      CDate(txtFecControl.Text.Trim).ToString("yyyy"), txtCantYears.Text.Trim,
-                                      "A")
-            pac = parametrizacion.consecutivoPac
-            For Each row As GridViewRow In tblNiveles.Rows
-                parametrizacion.insertLevels(row.Cells(1).Text.Trim, pac, row.Cells(0).Text.Trim,
-                                             row.Cells(2).Text.Trim, "A")
-            Next
-            DataT = Nothing
-            DataT = parametrizacion.selectJerarquia()
-            If DataT.Rows.Count > 0 Then
-                For Each row As DataRow In DataT.Rows
-                    parametrizacion.insertContents(pac, row("level"), row("code"), row("namelevel"), row("sublevel"),
-                                                   row("name"), row("weigth"), "A")
-                Next
-            End If
-
-            parametrizacion.deleteJerarquia()
-
-            alerta("Se ha creado la parametrización correctamente", "Pac: " & pac, "success", "")
-            limpiarForm()
-
-        Catch ex As Exception
-            lblError.Text = ex.Message
-        End Try
-    End Sub
-
     Private Sub btnPac_Click(sender As Object, e As EventArgs) Handles btnPac.Click
         Try
-            btnSigPac_Click(Nothing, Nothing)
+            'btnSigPac_Click(Nothing, Nothing)
+
+            'If lblPac.Text = String.Empty Then
+            '    alerta("Advertencia", "El pac no esta registrado", "info", "")
+            '    btnPac_Click(Nothing, Nothing)
+            '    Exit Sub
+            'End If
+
             pnlPac.Visible = True
             pestaña(1)
             pnlNiveles.Visible = False
             pnlPlanAccion.Visible = False
         Catch ex As Exception
             lblError.Text = ex.Message
+            lblError.Visible = True
         End Try
     End Sub
     Private Sub btnNiveles_Click(sender As Object, e As EventArgs) Handles btnNiveles.Click
         Try
-            btnSigPac_Click(Nothing, Nothing)
+            If lblPac.Text = String.Empty Then
+                alerta("Advertencia", "El pac no esta registrado", "info", "")
+                btnPac_Click(Nothing, Nothing)
+                Exit Sub
+            End If
+
+            pestaña(2)
+            pnlPac.Visible = False
+            pnlNiveles.Visible = True
+            pnlPlanAccion.Visible = False
         Catch ex As Exception
             lblError.Text = ex.Message
+            lblError.Visible = True
         End Try
     End Sub
 
     Private Sub btnPlanAccion_Click(sender As Object, e As EventArgs) Handles btnPlanAccion.Click
         Try
-            btnSigPac_Click(Nothing, Nothing)
-            btnSigNiveles_Click(Nothing, Nothing)
+            If lblPac.Text = String.Empty Then
+                alerta("Advertencia", "El pac no esta registrado", "info", "")
+                btnPac_Click(Nothing, Nothing)
+                Exit Sub
+            End If
+
+            pestaña(3)
+            pnlPac.Visible = False
+            pnlNiveles.Visible = False
+            pnlPlanAccion.Visible = True
         Catch ex As Exception
             lblError.Text = ex.Message
+            lblError.Visible = True
         End Try
     End Sub
 
@@ -142,127 +374,157 @@
                 alerta("Advertencia", "Ingrese la cantidad de años", "info", "contenedor2_txtCantYears")
                 Exit Sub
             End If
-            If txtFecControl.Text = String.Empty Then
-                alerta("Advertencia", "Ingrese la fecha de control", "info", "contenedor2_txtFecControl")
-                Exit Sub
+
+            If parametrizacion.updatePac(txtNomPac.Text.Trim, txtSlogan.Text.Trim, txtYearInicial.Text.Trim,
+                                         txtYearFinal.Text.Trim, txtCantYears.Text.Trim,
+                                         "A", lblPac.Text.Trim) > 0 Then
+
+                alerta("Se ha actualizado el pac correctamente", "Pac:  " & lblPac.Text.Trim, "success", "")
+            Else
+                parametrizacion.insertPac(txtNomPac.Text.Trim, txtSlogan.Text.Trim, txtYearInicial.Text.Trim,
+                                          txtYearFinal.Text.Trim, txtCantYears.Text.Trim,
+                                          "A")
+                lblPac.Text = parametrizacion.consecutivoPac
+                alerta("Se ha creado el pac correctamente", "Pac:  " & lblPac.Text.Trim, "success", "")
             End If
+
             pestaña(2)
             pnlPac.Visible = False
             pnlNiveles.Visible = True
             pnlPlanAccion.Visible = False
         Catch ex As Exception
             lblError.Text = ex.Message
+            lblError.Visible = True
         End Try
     End Sub
+
+    Private Sub btnActPac_Click(sender As Object, e As EventArgs) Handles btnActPac.Click
+        btnSigPac_Click(Nothing, Nothing)
+    End Sub
+
+
     Private Sub btnSigNiveles_Click(sender As Object, e As EventArgs) Handles btnSigNiveles.Click
         Try
-            If tblNiveles.Rows.Count = 0 Then
-                alerta("Advertencia", "Ingrese un nivel", "info", "")
-                Exit Sub
-            End If
+            'If lblPac.Text = String.Empty Then
+            '    alerta("Advertencia", "El pac no esta registrado", "info", "")
+            '    btnPac_Click(Nothing, Nothing)
+            '    Exit Sub
+            'End If
+
+            'If tblNiveles.Rows.Count = 0 Then
+            '    alerta("Advertencia", "Ingrese un nivel", "info", "")
+            '    Exit Sub
+            'End If
+
+
+            'For Each row As GridViewRow In tblNiveles.Rows
+            '    If parametrizacion.updateLevels(row.Cells(0).Text.Trim, row.Cells(2).Text.Trim, row.Cells(1).Text.Trim, "A") > 0 Then
+
+            '        alerta("Se ha actualizado los niveles correctamente", "Pac:  " & lblPac.Text.Trim, "success", "")
+            '    Else
+            '        parametrizacion.insertLevels(row.Cells(2).Text.Trim, lblPac.Text.Trim, row.Cells(1).Text.Trim, "A")
+            '        lblPac.Text = parametrizacion.consecutivoPac
+            '        alerta("Se ha creado los niveles correctamente", "Pac:  " & lblPac.Text.Trim, "success", "")
+            '    End If
+
+            'Next
+
+            cargarNiveles(lblPac.Text.Trim)
 
             pestaña(3)
             pnlPac.Visible = False
             pnlNiveles.Visible = False
             pnlPlanAccion.Visible = True
 
-            parametrizacion.deleteJerarquia()
 
-            cmbNiveles.Items.Clear()
-            cmbNiveles.DataTextField = "name"
-            cmbNiveles.DataValueField = "id"
-            cmbNiveles.DataSource = Session("dtNiveles")
-            cmbNiveles.DataBind()
-            cmbNiveles.Items.Insert(0, New ListItem("---Seleccione---", ""))
 
         Catch ex As Exception
             lblError.Text = ex.Message
+            lblError.Visible = True
         End Try
     End Sub
+
+
+    'Private Sub btnActNiv_Click(sender As Object, e As EventArgs) Handles btnActNiv.Click
+    '    Try
+    '        btnSigNiveles_Click(Nothing, Nothing)
+    '    Catch ex As Exception
+    '        lblError.Text = ex.Message
+    '        lblError.Visible = True
+    '    End Try
+    'End Sub
 
     Private Sub btnAtrasNiveles_Click(sender As Object, e As EventArgs) Handles btnAtrasNiveles.Click
         Try
             btnPac_Click(Nothing, Nothing)
         Catch ex As Exception
             lblError.Text = ex.Message
+            lblError.Visible = True
         End Try
     End Sub
 
     Private Sub btnAtrasPlanAcc_Click(sender As Object, e As EventArgs) Handles btnAtrasPlanAcc.Click
         Try
-            btnSigNiveles_Click(Nothing, Nothing)
+            'btnSigNiveles_Click(Nothing, Nothing)
             pestaña(2)
             pnlPac.Visible = False
             pnlNiveles.Visible = True
             pnlPlanAccion.Visible = False
         Catch ex As Exception
             lblError.Text = ex.Message
+            lblError.Visible = True
         End Try
     End Sub
     Private Sub btnSigPlanAcc_Click(sender As Object, e As EventArgs) Handles btnSigPlanAcc.Click
-        ScriptManager.RegisterStartupScript(Me, GetType(Page), "alertaSN", "AlertaSN();", True)
+        Try
+            If tblPlanAccion.Rows.Count = 0 Then
+                alerta("Advertencia", "Ingrese la parametrización de plan de acción cuatrienal", "info", "")
+                Exit Sub
+            End If
+
+            limpiarForm()
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+
     End Sub
+
     Private Sub btnAgregar_Click(sender As Object, e As EventArgs) Handles btnAgregar.Click
         Try
-            Dim dt As New DataTable
-            dt.Columns.Add("id")
-            dt.Columns.Add("name")
-            dt.Columns.Add("weigth")
-            Dim row As DataRow
-
+            Dim hierarchy As Integer = 1
             If txtNombreNiv.Text = String.Empty Then
                 alerta("Advertencia", "Ingrese el nombre del nivel", "info", "contenedor2_txtNombreNiv")
                 Exit Sub
             End If
-            If txtPesoNiv.Text = String.Empty Then
-                alerta("Advertencia", "Ingrese el peso del nivel", "info", "contenedor2_txtPesoNiv")
-                Exit Sub
+
+            DataT = Nothing
+            DataT = parametrizacion.selectLevels(lblPac.Text.Trim, "hierarchy desc")
+            If DataT.Rows.Count > 0 Then
+                hierarchy = CInt(DataT(0)(3)) + 1
             End If
 
-            Dim i As Integer = 1
-            For Each fila As GridViewRow In tblNiveles.Rows
-                row = dt.NewRow()
-                row("id") = i
-                row("name") = fila.Cells(1).Text.Trim
-                row("weigth") = fila.Cells(2).Text.Trim
-                i = i + 1
-                dt.Rows.Add(row)
-            Next
-            row = dt.NewRow()
-            row("id") = i
-            row("name") = txtNombreNiv.Text.Trim
-            row("weigth") = txtPesoNiv.Text.Trim
-            dt.Rows.Add(row)
+            parametrizacion.insertLevels(txtNombreNiv.Text.Trim, lblPac.Text.Trim, hierarchy, "A")
 
-            tblPlanAccion.DataSource = Nothing
-            tblPlanAccion.DataBind()
+            cargarNiveles(lblPac.Text.Trim)
 
             txtNombreNiv.Text = String.Empty
-            txtPesoNiv.Text = String.Empty
-            Session("dtNiveles") = dt
-
-            tblNiveles.DataSource = dt
-            tblNiveles.DataBind()
-            tblNiveles.UseAccessibleHeader = True
-            tblNiveles.HeaderRow.TableSection = TableRowSection.TableHeader
 
         Catch ex As Exception
             lblError.Text = ex.Message
+            lblError.Visible = True
         End Try
     End Sub
 
     Private Sub btnAgregarPlanAcc_Click(sender As Object, e As EventArgs) Handles btnAgregarPlanAcc.Click
         Try
-            Dim dt As New DataTable
-            Dim dt2 As New DataTable
-            dt.Columns.Add("nivel")
-            dt.Columns.Add("hierarchy")
-            dt.Columns.Add("name")
-            dt.Columns.Add("weigth")
-            Dim row As DataRow
 
             If cmbNiveles.SelectedIndex = 0 Then
                 alerta("Advertencia", "Seleccione un nivel", "info", "contenedor2_cmbNiveles")
+                Exit Sub
+            End If
+            If txtCodigo.Text = String.Empty Then
+                alerta("Advertencia", "Ingrese un codigo código", "info", "contenedor2_cmbNiveles")
                 Exit Sub
             End If
             If txtNombrePlanAcc.Text = String.Empty Then
@@ -274,19 +536,6 @@
                 Exit Sub
             End If
 
-            Dim i As Integer = 0
-            dt2 = Session("dtNiveles")
-
-            i = 0
-            For Each fila As GridViewRow In tblPlanAccion.Rows
-                row = dt.NewRow()
-                row("hierarchy") = fila.Cells(1).Text.Trim
-                row("nivel") = fila.Cells(0).Text.Trim
-                row("name") = fila.Cells(2).Text.Trim
-                row("weigth") = fila.Cells(3).Text.Trim
-                dt.Rows.Add(row)
-            Next
-
             Dim subNivel, name As String
             If cmbSubNivel.Items.Count > 0 Then
                 subNivel = cmbSubNivel.SelectedValue.Trim
@@ -295,68 +544,139 @@
                 subNivel = String.Empty
             End If
 
-            Dim value, code, jerarquia As String
-            DataT = Nothing
-            DataT = parametrizacion.selectJerarquia(cmbNiveles.SelectedValue.Trim, subNivel)
-            If DataT.Rows.Count > 0 Then
-                For Each dr As DataRow In DataT.Rows
-                    'value = CInt(dr("value")) + 1
-                    code = dr("code")
-                    code = code.Substring(code.Length - 1)
-                    value = CInt(code) + 1
-                    If dr("code").Length = 1 Then
-                        code = value
-                    Else
-                        code = Mid(dr("code"), 1, Len(dr("code")) - 1) & value
-                    End If
-                    value = 0
-                    'code = value
-                    jerarquia = code
-                    Exit For
-                Next
-            Else
-                DataT = parametrizacion.selectJerarquia(cmbNiveles.SelectedValue.Trim - 1, "", subNivel)
-                If DataT.Rows.Count > 0 Then
-                    value = "1"
-                    If cmbSubNivel.SelectedValue = String.Empty Then
-                        code = DataT(0)(4)
-                    Else
-                        code = DataT(0)(4) & "." & value
-                    End If
-                    jerarquia = code
-                Else
-                    code = "1"
-                    value = "0"
-                    jerarquia = "1"
-                End If
+            Dim code As String
 
+            DataT = parametrizacion.selectContents(lblPac.Text.Trim, cmbNiveles.SelectedValue.Trim - 1, "", subNivel)
+            If DataT.Rows.Count > 0 Then
+                code = DataT(0)(3) & "." & txtCodigo.Text.Trim
+            Else
+                code = txtCodigo.Text.Trim
+            End If
+            DataT = Nothing
+            DataT = parametrizacion.selectContents(lblPac.Text.Trim, code)
+            If DataT.Rows.Count > 0 Then
+                alerta("Advertencia", "Jerarquia " & code & " ya existe", "info")
+                Exit Sub
             End If
 
-            parametrizacion.insertJerarquia(cmbNiveles.SelectedValue, subNivel, txtNombrePlanAcc.Text.Trim,
-                                            cmbNiveles.SelectedItem.ToString.Trim, code, txtPesoPlanAcc.Text.Trim)
 
-            row = dt.NewRow()
-            row("nivel") = cmbNiveles.SelectedValue
-            row("name") = txtNombrePlanAcc.Text.Trim
-            row("weigth") = txtPesoPlanAcc.Text.Trim
-            row("hierarchy") = jerarquia
-            dt.Rows.Add(row)
+            parametrizacion.insertContents(lblPac.Text.Trim, cmbNiveles.SelectedValue, code, cmbNiveles.SelectedItem.ToString.Trim, subNivel,
+                                           txtNombrePlanAcc.Text.Trim, txtPesoPlanAcc.Text.Trim, "A")
 
+            txtCodigo.Text = String.Empty
             txtNombrePlanAcc.Text = String.Empty
             txtPesoPlanAcc.Text = String.Empty
 
-            Session("dtPlanAccional") = dt
-            tblPlanAccion.DataSource = dt
-            tblPlanAccion.DataBind()
-            tblPlanAccion.HeaderRow.TableSection = TableRowSection.TableHeader
+            cargarPlanAccion(lblPac.Text.Trim)
+
+            alerta("Se ha creado el item correctamente", "", "success")
+
 
         Catch ex As Exception
             lblError.Text = ex.Message
+            lblError.Visible = True
         End Try
     End Sub
 #End Region
 
 #Region "Metodos - Funciones"
+    Public Sub visualizarPac(ByVal pac As String)
+        Try
+            If pac <> String.Empty Then
+                Fila = Nothing
+                Fila = parametrizacion.selectPac(pac)
+                If Fila IsNot Nothing Then
+                    lblPac.Text = Fila("id")
+                    txtNomPac.Text = Fila("name")
+                    txtSlogan.Text = Fila("slogan")
+                    txtYearInicial.Text = Fila("initial_year")
+                    txtCantYears.Text = Fila("number_years")
+                    txtYearFinal.Text = Fila("final_year")
+
+                    btnActPac.Visible = True
+                    btnSigPac.Visible = False
+
+                    cargarNiveles(lblPac.Text.Trim)
+                    cargarPlanAccion(lblPac.Text.Trim)
+
+                End If
+            End If
+
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
+    Public Sub cargarNiveles(ByVal pac As String)
+        Try
+            DataT = parametrizacion.selectLevels(pac)
+            If DataT.Rows.Count > 0 Then
+                tblNiveles.DataSource = DataT
+                tblNiveles.DataBind()
+                tblNiveles.UseAccessibleHeader = True
+                tblNiveles.HeaderRow.TableSection = TableRowSection.TableHeader
+
+                Session("dtNiveles") = DataT
+                cmbNiveles.Items.Clear()
+                cmbNiveles.DataTextField = "name"
+                cmbNiveles.DataValueField = "hierarchy"
+                cmbNiveles.DataSource = DataT
+                cmbNiveles.DataBind()
+                cmbNiveles.Items.Insert(0, New ListItem("---Seleccione---", ""))
+
+                'btnSigNiveles.Visible = False
+                'btnActNiv.Visible = True
+            Else
+                tblNiveles.DataSource = Nothing
+                tblNiveles.DataBind()
+            End If
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
+
+    Public Sub cargarPlanAccion(ByVal pac As String)
+        Try
+
+            DataT = Nothing
+            DataT = parametrizacion.selectContents(pac)
+            If DataT.Rows.Count > 0 Then
+                tblPlanAccion.DataSource = DataT
+                tblPlanAccion.DataBind()
+                tblPlanAccion.UseAccessibleHeader = True
+                tblPlanAccion.HeaderRow.TableSection = TableRowSection.TableHeader
+            End If
+
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
+
+    Private Sub eliminarNivel_Click(sender As Object, e As EventArgs) Handles eliminarNivel.Click
+        Try
+            parametrizacion.deleteLevels(Session("idNivel"), "I")
+            Session("idNivel") = Nothing
+            cargarNiveles(lblPac.Text.Trim)
+
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
+
+    Private Sub eliminarPlanAcc_Click(sender As Object, e As EventArgs) Handles eliminarPlanAcc.Click
+        Try
+            parametrizacion.deleteContents(Session("idPlanAcc"), "I")
+            Session("idPlanAcc") = Nothing
+            cargarPlanAccion(lblPac.Text.Trim)
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
+
     Public Sub alerta(ByVal mensaje As String, ByVal subMensaje As String, ByVal tipo As String, Optional foco As String = "")
         Dim Script As String = "<script type='text/javascript'> swal({title:'" + mensaje.Replace("'", " | ") + "', text:'" + subMensaje.Replace("'", " | ") + "' , type:'" + tipo + "', confirmButtonText:'OK'})"
         If foco.Trim <> "" Then
@@ -388,13 +708,14 @@
 
     Public Sub limpiarForm()
         Try
+            lblPac.Text = String.Empty
             txtNomPac.Text = String.Empty
             txtSlogan.Text = String.Empty
             txtYearInicial.Text = String.Empty
             txtCantYears.Text = String.Empty
-            txtFecControl.Text = String.Empty
+            txtYearFinal.Text = String.Empty
             txtNombreNiv.Text = String.Empty
-            txtPesoNiv.Text = String.Empty
+            'txtPesoNiv.Text = String.Empty
             tblNiveles.DataSource = Nothing
             tblNiveles.DataBind()
             cmbNiveles.Items.Clear()
@@ -411,12 +732,29 @@
             lblError.Text = String.Empty
             lblError.Visible = False
 
-
             pnlSubNivel.Visible = False
 
             Session("niveles") = Nothing
+            Session("pac") = Nothing
         Catch ex As Exception
             lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
+
+    Public Sub calcularYearFinal()
+        Try
+            Dim yearInicial As Integer = 0
+            Dim cantidadYears As Integer = 0
+
+            If txtYearInicial.Text <> String.Empty Then yearInicial = CInt(txtYearInicial.Text.Trim)
+            If txtCantYears.Text <> String.Empty Then cantidadYears = CInt(txtCantYears.Text.Trim)
+
+            txtYearFinal.Text = yearInicial + cantidadYears
+
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
         End Try
     End Sub
 

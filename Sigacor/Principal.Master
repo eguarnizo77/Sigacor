@@ -29,7 +29,7 @@
 
     <!--Datatable-->
     <link href="Componentes/vendor/datatables/datatables.min.css" rel="stylesheet" />
-    <link href="Componentes/vendor/datatables/RowReorder-1.2.7/css/rowReorder.dataTables.min.css" rel="stylesheet" />
+    <link href="Componentes/vendor/datatables/RowReorder-1.2.7/css/rowReorder.dataTables.min.css" rel="stylesheet" />    
 
 
     <asp:ContentPlaceHolder ID="contenedor1" runat="server">
@@ -190,6 +190,7 @@
     <script src="../Componentes/vendor/bootstrap/js/bootstrap.bundle.js"></script>
     <script src="../Componentes/js/sb-admin-2.min.js"></script>    
     <script src="../Componentes/vendor/datatables/datatables.min.js"></script>
-    <script src="../Componentes/vendor/datatables/RowReorder-1.2.7/js/dataTables.rowReorder.min.js"></script>
+    <script src="../Componentes/vendor/datatables/scriptTable.js"></script>
+
 </body>
 </html>

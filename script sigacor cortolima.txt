@@ -3,7 +3,7 @@ CREATE TABLE [profiles] (
   [user_id] nvarchar(255),
   [rol_id] nvarchar(255),
   [address] nvarchar(255),
-  [movil] int,
+  [movil] nvarchar(50),
   [state] nvarchar(255)
 )
 GO
@@ -12,6 +12,7 @@ insert into profiles(user_id, rol_id, address, movil, state) values ('katherinne
 
 CREATE TABLE [menu] (
   [name] nvarchar(255),
+  [route] nvarchar(255),
   [icon] nvarchar(255),
   [orden] int,
   [state] nvarchar(255)
@@ -55,3 +56,55 @@ GO
 
 insert into states(name, description) values ('A', 'Activo');
 insert into states(name, description) values ('I', 'Inactivo');
+
+CREATE TABLE pac (
+  id int PRIMARY KEY IDENTITY(1, 1),
+  name nvarchar(255),
+  slogan nvarchar(255),
+  initial_year int, 
+  final_year int, 
+  number_years int, 
+  state nvarchar(255)
+)
+
+CREATE TABLE levels (
+  id int PRIMARY KEY IDENTITY(1, 1),
+  name nvarchar(255),
+  pac_id int,
+  hierarchy int, 
+  weigth decimal, 
+  state nvarchar(255)
+)
+
+CREATE TABLE contents (
+  id int PRIMARY KEY IDENTITY(1, 1),
+  pac_id int,
+  level_id int,
+  code nvarchar(255)
+  name_level nvarchar(255), 
+  sublevel nvarchar(255)
+  name nvarchar(255),
+  weigth decimal, 
+  state nvarchar(255)
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -50,6 +50,15 @@ Partial Public Class NuevoRegistro
     Protected WithEvents pnlPac As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
+    '''Control lblPac.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblPac As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''Control txtNomPac.
     '''</summary>
     '''<remarks>
@@ -86,13 +95,13 @@ Partial Public Class NuevoRegistro
     Protected WithEvents txtCantYears As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''Control txtFecControl.
+    '''Control txtYearFinal.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents txtFecControl As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtYearFinal As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
     '''Control btnSigPac.
@@ -102,6 +111,15 @@ Partial Public Class NuevoRegistro
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents btnSigPac As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''Control btnActPac.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnActPac As Global.System.Web.UI.WebControls.LinkButton
 
     '''<summary>
     '''Control pnlNiveles.
@@ -120,15 +138,6 @@ Partial Public Class NuevoRegistro
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents txtNombreNiv As Global.System.Web.UI.WebControls.TextBox
-
-    '''<summary>
-    '''Control txtPesoNiv.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents txtPesoNiv As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
     '''Control btnAgregar.
@@ -212,6 +221,33 @@ Partial Public Class NuevoRegistro
     Protected WithEvents cmbSubNivel As Global.System.Web.UI.WebControls.DropDownList
 
     '''<summary>
+    '''Control lblCodigo.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblCodigo As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control txtCodigo.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtCodigo As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control lblNombre.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblNombre As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''Control txtNombrePlanAcc.
     '''</summary>
     '''<remarks>
@@ -266,15 +302,6 @@ Partial Public Class NuevoRegistro
     Protected WithEvents btnSigPlanAcc As Global.System.Web.UI.WebControls.LinkButton
 
     '''<summary>
-    '''Control btnGrabar.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents btnGrabar As Global.System.Web.UI.WebControls.LinkButton
-
-    '''<summary>
     '''Control lblError.
     '''</summary>
     '''<remarks>
@@ -282,4 +309,22 @@ Partial Public Class NuevoRegistro
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents lblError As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control eliminarNivel.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents eliminarNivel As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''Control eliminarPlanAcc.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents eliminarPlanAcc As Global.System.Web.UI.WebControls.LinkButton
 End Class
