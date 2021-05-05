@@ -46,8 +46,7 @@ Public Class clParametrizacion
 
     Public Function selectPac() As DataTable
 
-        QRY = "select id, name, slogan, initial_year, final_year, number_years, convert(varchar, fec_control, 111) as fec_control, 
-               convert(varchar, fec_control, 6) as fec_control_DMY, state from pac where state = 'A' 
+        QRY = "select id, name, slogan, initial_year, final_year, number_years, state from pac where state = 'A' 
                order by id"
 
         Return Data.OpenData(QRY)
