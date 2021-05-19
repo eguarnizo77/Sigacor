@@ -41,6 +41,15 @@ Partial Public Class NuevoRegistro
     Protected WithEvents btnPlanAccion As Global.System.Web.UI.WebControls.LinkButton
 
     '''<summary>
+    '''Control btnMetas.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnMetas As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
     '''Control pnlPac.
     '''</summary>
     '''<remarks>
@@ -302,6 +311,141 @@ Partial Public Class NuevoRegistro
     Protected WithEvents btnSigPlanAcc As Global.System.Web.UI.WebControls.LinkButton
 
     '''<summary>
+    '''Control pnlMetas.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents pnlMetas As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''Control lblIdMeta.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblIdMeta As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control txtNombreMeta.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtNombreMeta As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control cmbTipoMeta.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents cmbTipoMeta As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''Control cmbSubActividad.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents cmbSubActividad As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''Control txtLineaBaseMeta.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtLineaBaseMeta As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control txtPriYearMeta.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtPriYearMeta As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control txtSegYearMeta.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtSegYearMeta As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control txtTerYearMeta.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtTerYearMeta As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control txtCuaYearMeta.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtCuaYearMeta As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control cmbResponsable.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents cmbResponsable As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''Control cmbAlimentador.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents cmbAlimentador As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''Control btnAtrasMetas.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnAtrasMetas As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''Control btnGrabarMetas.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnGrabarMetas As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''Control tblMetas.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents tblMetas As Global.System.Web.UI.WebControls.GridView
+
+    '''<summary>
     '''Control lblError.
     '''</summary>
     '''<remarks>
@@ -327,4 +471,103 @@ Partial Public Class NuevoRegistro
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents eliminarPlanAcc As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''Control txtNombreMetaMdl.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtNombreMetaMdl As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control cmbTipoMetaMdl.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents cmbTipoMetaMdl As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''Control cmbSubActividadMetaMdl.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents cmbSubActividadMetaMdl As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''Control txtLineaBaseMetaMdl.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtLineaBaseMetaMdl As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control txtPriYearMetaMdl.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtPriYearMetaMdl As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control txtSegYearMetaMdl.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtSegYearMetaMdl As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control txtTercYearMetaMdl.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtTercYearMetaMdl As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control txtPCuartYearMetaMdl.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtPCuartYearMetaMdl As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control cmbResponsableMdl.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents cmbResponsableMdl As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''Control cmbAlimentadorMdl.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents cmbAlimentadorMdl As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''Control btnActualizarMeta.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnActualizarMeta As Global.System.Web.UI.WebControls.LinkButton
 End Class

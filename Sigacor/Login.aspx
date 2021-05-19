@@ -57,29 +57,31 @@
             <div class="col-7"></div>
             <div class="col-5">
                 <footer>
-                    <div class="row">
-                        <div class="col-6 text-center">
-                            <img style="border-right: 2px solid #36523F" src="Componentes/img/cortolima.png" height="105" width="180" /><br />
-                            <img style="margin-top: -10%" src="Componentes/img/LOGOS-ICONTEC-CERTIFICACIONES-2020.png" height="20" width="70" />
+                        <div class="row">
+                            <div class="col-7 text-center">
+                                <img style="border-right: 2px solid #36523F" src="Componentes/img/cortolima.png" height="130" width="220" /><br />                                
+                            </div>
+                            <div class="col-5 text-center">
+                                <br />
+                                <img class="mt-3" src="Componentes/img/LOGOS-ICONTEC-CERTIFICACIONES-2020.png" height="60" width="180" />                                
+                            </div>
+                            <div class="col-12 text-center mb-4"> 
+                                <label class="tlPanel">www.cortolima.gov.co</label><br />
+                                <a href="#" class="btn btn btnRedesociales btn-circle">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#" class="btn btnRedesociales btn-circle">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="#" class="btn btnRedesociales btn-circle">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                                <a href="#" class="btn btnRedesociales btn-circle">
+                                    <i class="fab fa-youtube"></i>
+                                </a>
+                            </div>
                         </div>
-                        <div class="col-6 text-center">
-                            <br />
-                            <label class="tlPanel">www.cortolima.gov.co</label><br />
-                            <a href="#" class="btn btn btnRedesociales btn-circle">
-                                <i class="fab fa-facebook-f"></i>
-                            </a>
-                            <a href="#" class="btn btnRedesociales btn-circle">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                            <a href="#" class="btn btnRedesociales btn-circle">
-                                <i class="fab fa-whatsapp"></i>
-                            </a>
-                            <a href="#" class="btn btnRedesociales btn-circle">
-                                <i class="fab fa-youtube"></i>
-                            </a>
-                        </div>
-                    </div>
-                </footer>
+                    </footer>
             </div>
         </div>
     </form>

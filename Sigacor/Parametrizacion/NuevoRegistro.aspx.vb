@@ -2,6 +2,7 @@
     Inherits System.Web.UI.Page
 
     Dim parametrizacion As New clParametrizacion
+    Dim users As New clLogin
     Dim fun As New Funciones
 
 #Region "Load"
@@ -12,11 +13,59 @@
             pnlSubNivel.Visible = False
             pnlNiveles.Visible = False
             pnlPlanAccion.Visible = False
+            pnlMetas.Visible = False
             lblError.Visible = False
-
             btnActPac.Visible = False
-            'btnActNiv.Visible = False
-            btnSigPlanAcc.Visible = False
+
+            DataT = Nothing
+            DataT = users.selectUsuario
+            If DataT.Rows.Count > 0 Then
+                cmbResponsable.Items.Clear()
+                cmbResponsable.DataTextField = "nombreEmp"
+                cmbResponsable.DataValueField = "user_id"
+                cmbResponsable.DataSource = DataT
+                cmbResponsable.DataBind()
+                cmbResponsable.Items.Insert(0, New ListItem("---Seleccione---", ""))
+
+                cmbResponsableMdl.Items.Clear()
+                cmbResponsableMdl.DataTextField = "nombreEmp"
+                cmbResponsableMdl.DataValueField = "user_id"
+                cmbResponsableMdl.DataSource = DataT
+                cmbResponsableMdl.DataBind()
+                cmbResponsableMdl.Items.Insert(0, New ListItem("---Seleccione---", ""))
+
+                cmbAlimentador.Items.Clear()
+                cmbAlimentador.DataTextField = "nombreEmp"
+                cmbAlimentador.DataValueField = "user_id"
+                cmbAlimentador.DataSource = DataT
+                cmbAlimentador.DataBind()
+                cmbAlimentador.Items.Insert(0, New ListItem("---Seleccione---", ""))
+
+                cmbAlimentadorMdl.Items.Clear()
+                cmbAlimentadorMdl.DataTextField = "nombreEmp"
+                cmbAlimentadorMdl.DataValueField = "user_id"
+                cmbAlimentadorMdl.DataSource = DataT
+                cmbAlimentadorMdl.DataBind()
+                cmbAlimentadorMdl.Items.Insert(0, New ListItem("---Seleccione---", ""))
+            End If
+
+            DataT = Nothing
+            DataT = fun.goal_type
+            If DataT.Rows.Count > 0 Then
+                cmbTipoMeta.Items.Clear()
+                cmbTipoMeta.DataTextField = "description"
+                cmbTipoMeta.DataValueField = "name"
+                cmbTipoMeta.DataSource = DataT
+                cmbTipoMeta.DataBind()
+                cmbTipoMeta.Items.Insert(0, New ListItem("---Seleccione---", ""))
+
+                cmbTipoMetaMdl.Items.Clear()
+                cmbTipoMetaMdl.DataTextField = "description"
+                cmbTipoMetaMdl.DataValueField = "name"
+                cmbTipoMetaMdl.DataSource = DataT
+                cmbTipoMetaMdl.DataBind()
+                cmbTipoMetaMdl.Items.Insert(0, New ListItem("---Seleccione---", ""))
+            End If
 
             visualizarPac(Session("id_pac"))
             Session("id_pac") = Nothing
@@ -32,6 +81,11 @@
             tblPlanAccion.UseAccessibleHeader = True
             tblPlanAccion.HeaderRow.TableSection = TableRowSection.TableHeader
         End If
+        If tblMetas.Rows.Count > 0 Then
+            tblMetas.UseAccessibleHeader = True
+            tblMetas.HeaderRow.TableSection = TableRowSection.TableHeader
+        End If
+
     End Sub
 
 #End Region
@@ -142,6 +196,26 @@
             lblError.Visible = True
         End Try
     End Sub
+    Private Sub tblMetas_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles tblMetas.RowDataBound
+        Try
+            If e.Row.RowType = DataControlRowType.DataRow Then
+                Dim linkBtn, linkBtn2 As New LinkButton
+                linkBtn = e.Row.FindControl("lnkEditarMeta")
+                linkBtn2 = e.Row.FindControl("lnkEliminarMeta")
+
+                linkBtn.CommandArgument = e.Row.Cells(0).Text.Trim
+                linkBtn2.CommandArgument = e.Row.Cells(0).Text.Trim
+
+                e.Row.Cells(0).Visible = False
+            End If
+            If e.Row.RowType = DataControlRowType.Header Then
+                e.Row.Cells(0).Visible = False
+            End If
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
 
 #End Region
 
@@ -199,7 +273,22 @@
                             alerta("Advertencia", "Ingrese el nombre del nivel", "info")
                             Exit Sub
                         End If
-                        parametrizacion.updateLevels(row.Cells(0).Text.Trim, nombre.Text.Trim, codigo.Text.Trim, "A")
+                        Fila = Nothing
+                        Fila = parametrizacion.selectLevelsFila(lblPac.Text.Trim, codigo.Text.Trim, nombre.Text.Trim)
+                        If Fila Is Nothing Then
+
+                            If row.Cells(1).Text.Trim <> codigo.Text.Trim Then
+                                Fila = Nothing
+                                Fila = parametrizacion.selectLevelsFila(lblPac.Text.Trim, codigo.Text.Trim)
+                                If Fila IsNot Nothing Then
+                                    alerta("Advertencia", "El código del nivel, ya existe", "info")
+                                    Exit Sub
+                                End If
+                            Else
+                                parametrizacion.updateLevels(row.Cells(0).Text.Trim, nombre.Text.Trim, codigo.Text.Trim, "A")
+                            End If
+
+                        End If
                     End If
                 Next
 
@@ -297,24 +386,50 @@
         End Try
     End Sub
 
+    Private Sub tblMetas_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles tblMetas.RowCommand
+        Try
+            lblIdMeta.Text = e.CommandArgument
+
+            If e.CommandName = "Editar" Then
+                ScriptManager.RegisterStartupScript(Me, GetType(Page), "modal", "abrirModal();", True)
+                Fila = parametrizacion.selectGoals(lblPac.Text.Trim, lblIdMeta.Text)
+                If Fila IsNot Nothing Then
+                    txtNombreMetaMdl.Text = Fila("name")
+                    cmbTipoMetaMdl.SelectedValue = Fila("type_goal")
+                    cmbSubActividadMetaMdl.SelectedValue = Fila("subactivity")
+                    txtLineaBaseMetaMdl.Text = Fila("line_base")
+                    txtPriYearMetaMdl.Text = Fila("value_one_year")
+                    txtSegYearMetaMdl.Text = Fila("value_two_year")
+                    txtTercYearMetaMdl.Text = Fila("value_three_year")
+                    txtPCuartYearMetaMdl.Text = Fila("value_four_year")
+                    cmbResponsableMdl.SelectedValue = Fila("responsable_id")
+                    cmbAlimentadorMdl.SelectedValue = Fila("feeder_id")
+                End If
+
+            ElseIf e.CommandName = "Eliminar" Then
+                parametrizacion.updateStateGoals(lblIdMeta.Text.Trim)
+                cargarMetas(lblPac.Text.Trim, 0)
+                alerta("Se ha eliminado la meta correctamente", "", "success", "")
+            End If
+
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
+
 #End Region
 
 #Region "Click"
 
+#Region "Pestañas"
     Private Sub btnPac_Click(sender As Object, e As EventArgs) Handles btnPac.Click
         Try
-            'btnSigPac_Click(Nothing, Nothing)
-
-            'If lblPac.Text = String.Empty Then
-            '    alerta("Advertencia", "El pac no esta registrado", "info", "")
-            '    btnPac_Click(Nothing, Nothing)
-            '    Exit Sub
-            'End If
-
             pnlPac.Visible = True
             pestaña(1)
             pnlNiveles.Visible = False
             pnlPlanAccion.Visible = False
+            pnlMetas.Visible = False
         Catch ex As Exception
             lblError.Text = ex.Message
             lblError.Visible = True
@@ -332,6 +447,7 @@
             pnlPac.Visible = False
             pnlNiveles.Visible = True
             pnlPlanAccion.Visible = False
+            pnlMetas.Visible = False
         Catch ex As Exception
             lblError.Text = ex.Message
             lblError.Visible = True
@@ -350,12 +466,33 @@
             pnlPac.Visible = False
             pnlNiveles.Visible = False
             pnlPlanAccion.Visible = True
+            pnlMetas.Visible = False
         Catch ex As Exception
             lblError.Text = ex.Message
             lblError.Visible = True
         End Try
     End Sub
 
+    Private Sub btnMetas_Click(sender As Object, e As EventArgs) Handles btnMetas.Click
+        Try
+            If lblPac.Text = String.Empty Then
+                alerta("Advertencia", "El pac no esta registrado", "info", "")
+                btnPac_Click(Nothing, Nothing)
+                Exit Sub
+            End If
+
+            pestaña(4)
+            pnlPac.Visible = False
+            pnlNiveles.Visible = False
+            pnlPlanAccion.Visible = False
+            pnlMetas.Visible = True
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
+
+#End Region
     Private Sub btnSigPac_Click(sender As Object, e As EventArgs) Handles btnSigPac.Click
         Try
             If txtNomPac.Text = String.Empty Then
@@ -402,33 +539,8 @@
         btnSigPac_Click(Nothing, Nothing)
     End Sub
 
-
     Private Sub btnSigNiveles_Click(sender As Object, e As EventArgs) Handles btnSigNiveles.Click
         Try
-            'If lblPac.Text = String.Empty Then
-            '    alerta("Advertencia", "El pac no esta registrado", "info", "")
-            '    btnPac_Click(Nothing, Nothing)
-            '    Exit Sub
-            'End If
-
-            'If tblNiveles.Rows.Count = 0 Then
-            '    alerta("Advertencia", "Ingrese un nivel", "info", "")
-            '    Exit Sub
-            'End If
-
-
-            'For Each row As GridViewRow In tblNiveles.Rows
-            '    If parametrizacion.updateLevels(row.Cells(0).Text.Trim, row.Cells(2).Text.Trim, row.Cells(1).Text.Trim, "A") > 0 Then
-
-            '        alerta("Se ha actualizado los niveles correctamente", "Pac:  " & lblPac.Text.Trim, "success", "")
-            '    Else
-            '        parametrizacion.insertLevels(row.Cells(2).Text.Trim, lblPac.Text.Trim, row.Cells(1).Text.Trim, "A")
-            '        lblPac.Text = parametrizacion.consecutivoPac
-            '        alerta("Se ha creado los niveles correctamente", "Pac:  " & lblPac.Text.Trim, "success", "")
-            '    End If
-
-            'Next
-
             cargarNiveles(lblPac.Text.Trim)
 
             pestaña(3)
@@ -436,23 +548,11 @@
             pnlNiveles.Visible = False
             pnlPlanAccion.Visible = True
 
-
-
         Catch ex As Exception
             lblError.Text = ex.Message
             lblError.Visible = True
         End Try
     End Sub
-
-
-    'Private Sub btnActNiv_Click(sender As Object, e As EventArgs) Handles btnActNiv.Click
-    '    Try
-    '        btnSigNiveles_Click(Nothing, Nothing)
-    '    Catch ex As Exception
-    '        lblError.Text = ex.Message
-    '        lblError.Visible = True
-    '    End Try
-    'End Sub
 
     Private Sub btnAtrasNiveles_Click(sender As Object, e As EventArgs) Handles btnAtrasNiveles.Click
         Try
@@ -465,7 +565,6 @@
 
     Private Sub btnAtrasPlanAcc_Click(sender As Object, e As EventArgs) Handles btnAtrasPlanAcc.Click
         Try
-            'btnSigNiveles_Click(Nothing, Nothing)
             pestaña(2)
             pnlPac.Visible = False
             pnlNiveles.Visible = True
@@ -475,14 +574,33 @@
             lblError.Visible = True
         End Try
     End Sub
+
+    Private Sub btnAtrasMetas_Click(sender As Object, e As EventArgs) Handles btnAtrasMetas.Click
+        Try
+            pestaña(3)
+            pnlPac.Visible = False
+            pnlNiveles.Visible = False
+            pnlPlanAccion.Visible = True
+            pnlMetas.Visible = False
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
+
     Private Sub btnSigPlanAcc_Click(sender As Object, e As EventArgs) Handles btnSigPlanAcc.Click
         Try
+            If lblPac.Text = String.Empty Then
+                alerta("Advertencia", "El pac no esta registrado", "info", "")
+                btnPac_Click(Nothing, Nothing)
+                Exit Sub
+            End If
             If tblPlanAccion.Rows.Count = 0 Then
                 alerta("Advertencia", "Ingrese la parametrización de plan de acción cuatrienal", "info", "")
                 Exit Sub
             End If
 
-            limpiarForm()
+            btnMetas_Click(Nothing, Nothing)
         Catch ex As Exception
             lblError.Text = ex.Message
             lblError.Visible = True
@@ -504,11 +622,12 @@
                 hierarchy = CInt(DataT(0)(3)) + 1
             End If
 
-            parametrizacion.insertLevels(txtNombreNiv.Text.Trim, lblPac.Text.Trim, hierarchy, "A")
-
-            cargarNiveles(lblPac.Text.Trim)
-
-            txtNombreNiv.Text = String.Empty
+            If parametrizacion.insertLevels(txtNombreNiv.Text.Trim, lblPac.Text.Trim, hierarchy, "A") > 0 Then
+                cargarNiveles(lblPac.Text.Trim)
+                txtNombreNiv.Text = String.Empty
+            Else
+                alerta("Advertencia", "Se genero un error al grabar", "error", "")
+            End If
 
         Catch ex As Exception
             lblError.Text = ex.Message
@@ -560,23 +679,145 @@
             End If
 
 
-            parametrizacion.insertContents(lblPac.Text.Trim, cmbNiveles.SelectedValue, code, cmbNiveles.SelectedItem.ToString.Trim, subNivel,
-                                           txtNombrePlanAcc.Text.Trim, txtPesoPlanAcc.Text.Trim, "A")
+            If parametrizacion.insertContents(lblPac.Text.Trim, cmbNiveles.SelectedValue, code, cmbNiveles.SelectedItem.ToString.Trim, subNivel,
+                                           txtNombrePlanAcc.Text.Trim, txtPesoPlanAcc.Text.Trim, "A") > 0 Then
 
-            txtCodigo.Text = String.Empty
-            txtNombrePlanAcc.Text = String.Empty
-            txtPesoPlanAcc.Text = String.Empty
+                txtCodigo.Text = String.Empty
+                txtNombrePlanAcc.Text = String.Empty
+                txtPesoPlanAcc.Text = String.Empty
 
-            cargarPlanAccion(lblPac.Text.Trim)
-
-            alerta("Se ha creado el item correctamente", "", "success")
-
+                cargarPlanAccion(lblPac.Text.Trim)
+                alerta("Se ha creado el item correctamente", "", "success")
+            Else
+                alerta("Advertencia", "Se genero un error al grabar", "error", "")
+            End If
 
         Catch ex As Exception
             lblError.Text = ex.Message
             lblError.Visible = True
         End Try
     End Sub
+
+    Private Sub btnGrabarMetas_Click(sender As Object, e As EventArgs) Handles btnGrabarMetas.Click
+        Try
+            If txtNombreMeta.Text = String.Empty Then
+                alerta("Advertencia", "Ingrese el nombre de la meta", "info", "contenedor2_txtNombreMeta")
+                Exit Sub
+            End If
+            If cmbTipoMeta.SelectedIndex = 0 Then
+                alerta("Advertencia", "Seleccione el tipo de meta", "info", "contenedor2_cmbTipoMeta")
+                Exit Sub
+            End If
+            If cmbSubActividad.SelectedIndex = 0 Then
+                alerta("Advertencia", "Seleccione la subactividad la meta", "info", "contenedor2_cmbSubActividad")
+                Exit Sub
+            End If
+            If txtLineaBaseMeta.Text = String.Empty Then
+                alerta("Advertencia", "Ingrese la linea base", "info", "contenedor2_txtLineaBaseMeta")
+                Exit Sub
+            End If
+            If txtPriYearMeta.Text = String.Empty Then
+                alerta("Advertencia", "Ingrese la cantidad para el primer año", "info", "contenedor2_txtPriYearMeta")
+                Exit Sub
+            End If
+            If txtSegYearMeta.Text = String.Empty Then
+                alerta("Advertencia", "Ingrese la cantidad para el segundo año", "info", "contenedor2_txtSegYearMeta")
+                Exit Sub
+            End If
+            If txtTerYearMeta.Text = String.Empty Then
+                alerta("Advertencia", "Ingrese la cantidad para el tercer año", "info", "contenedor2_txtTerYearMeta")
+                Exit Sub
+            End If
+            If txtCuaYearMeta.Text = String.Empty Then
+                alerta("Advertencia", "Ingrese la cantidad para el cuarto año", "info", "contenedor2_txtCuaYearMeta")
+                Exit Sub
+            End If
+            If cmbResponsable.SelectedIndex = 0 Then
+                alerta("Advertencia", "Seleccione el responsable", "info", "contenedor2_cmbResponsable")
+                Exit Sub
+            End If
+            If cmbAlimentador.SelectedIndex = 0 Then
+                alerta("Advertencia", "Seleccione el alimentador", "info", "contenedor2_cmbAlimentador")
+                Exit Sub
+            End If
+
+            If parametrizacion.insertGoals(lblPac.Text.Trim, txtNombreMeta.Text.Trim, cmbTipoMeta.SelectedValue,
+                                           cmbSubActividad.SelectedValue, txtLineaBaseMeta.Text.Trim, txtPriYearMeta.Text.Trim,
+                                           txtSegYearMeta.Text.Trim, txtTerYearMeta.Text.Trim, txtCuaYearMeta.Text.Trim,
+                                           cmbResponsable.SelectedValue.Trim, cmbAlimentador.SelectedValue.Trim, "A") > 0 Then
+
+                alerta("Se ha creado correctamente la meta", "", "success", "")
+                limpiarMetas()
+            Else
+                alerta("Advertencia", "Se genero un error al grabar", "error", "")
+            End If
+
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
+
+    Private Sub btnActualizarMeta_Click(sender As Object, e As EventArgs) Handles btnActualizarMeta.Click
+        Try
+            If txtNombreMetaMdl.Text = String.Empty Then
+                alertaMdl("Advertencia", "Ingrese el nombre de la meta", "info", "mdlEditarMeta", "contenedor2_txtNombreMetaMdl")
+                Exit Sub
+            End If
+            If cmbTipoMetaMdl.SelectedIndex = 0 Then
+                alertaMdl("Advertencia", "Seleccione el tipo de meta", "info", "mdlEditarMeta", "contenedor2_cmbTipoMetaMdl")
+                Exit Sub
+            End If
+            If cmbSubActividadMetaMdl.SelectedIndex = 0 Then
+                alertaMdl("Advertencia", "Seleccione la subactividad la meta", "info", "mdlEditarMeta", "contenedor2_cmbSubActividadMetaMdl")
+                Exit Sub
+            End If
+            If txtLineaBaseMetaMdl.Text = String.Empty Then
+                alertaMdl("Advertencia", "Ingrese la linea base", "info", "mdlEditarMeta", "contenedor2_txtLineaBaseMetaMdl")
+                Exit Sub
+            End If
+            If txtPriYearMetaMdl.Text = String.Empty Then
+                alertaMdl("Advertencia", "Ingrese la cantidad para el primer año", "info", "mdlEditarMeta", "contenedor2_txtPriYearMetaMdl")
+                Exit Sub
+            End If
+            If txtSegYearMetaMdl.Text = String.Empty Then
+                alertaMdl("Advertencia", "Ingrese la cantidad para el segundo año", "info", "mdlEditarMeta", "contenedor2_txtSegYearMetaMdl")
+                Exit Sub
+            End If
+            If txtTercYearMetaMdl.Text = String.Empty Then
+                alertaMdl("Advertencia", "Ingrese la cantidad para el tercer año", "info", "mdlEditarMeta", "contenedor2_txtTercYearMetaMdl")
+                Exit Sub
+            End If
+            If txtPCuartYearMetaMdl.Text = String.Empty Then
+                alertaMdl("Advertencia", "Ingrese la cantidad para el cuarto año", "info", "mdlEditarMeta", "contenedor2_txtPCuartYearMetaMdl")
+                Exit Sub
+            End If
+            If cmbResponsableMdl.SelectedIndex = 0 Then
+                alertaMdl("Advertencia", "Seleccione el responsable", "info", "contenedor2_cmbResponsableMdl")
+                Exit Sub
+            End If
+            If cmbAlimentadorMdl.SelectedIndex = 0 Then
+                alertaMdl("Advertencia", "Seleccione el alimentador", "info", "contenedor2_cmbAlimentadorMdl")
+                Exit Sub
+            End If
+
+            If parametrizacion.updateGoals(lblIdMeta.Text.Trim, txtNombreMetaMdl.Text.Trim, cmbTipoMetaMdl.SelectedValue,
+                                           cmbSubActividadMetaMdl.SelectedValue, txtLineaBaseMetaMdl.Text.Trim, txtPriYearMetaMdl.Text.Trim,
+                                           txtSegYearMetaMdl.Text.Trim, txtTercYearMetaMdl.Text.Trim, txtPCuartYearMetaMdl.Text.Trim,
+                                           cmbResponsableMdl.SelectedValue.Trim, cmbAlimentadorMdl.SelectedValue.Trim) > 0 Then
+
+                alerta("Se ha actualizado correctamente la meta", "", "success", "")
+                limpiarMetas()
+            Else
+                alerta("Advertencia", "Se genero un error al actualizar", "error", "")
+            End If
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
+
+
 #End Region
 
 #Region "Metodos - Funciones"
@@ -598,7 +839,7 @@
 
                     cargarNiveles(lblPac.Text.Trim)
                     cargarPlanAccion(lblPac.Text.Trim)
-
+                    cargarMetas(lblPac.Text.Trim, 1)
                 End If
             End If
 
@@ -624,8 +865,6 @@
                 cmbNiveles.DataBind()
                 cmbNiveles.Items.Insert(0, New ListItem("---Seleccione---", ""))
 
-                'btnSigNiveles.Visible = False
-                'btnActNiv.Visible = True
             Else
                 tblNiveles.DataSource = Nothing
                 tblNiveles.DataBind()
@@ -646,8 +885,66 @@
                 tblPlanAccion.DataBind()
                 tblPlanAccion.UseAccessibleHeader = True
                 tblPlanAccion.HeaderRow.TableSection = TableRowSection.TableHeader
+            Else
+                tblPlanAccion.DataSource = Nothing
+                tblPlanAccion.DataBind()
             End If
 
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
+
+    Public Sub cargarMetas(ByVal pac As String, ByVal proceso As Integer)
+        Try
+            If pac <> String.Empty Then
+                If proceso = 1 Then
+                    Dim codLevel As String
+                    DataT = Nothing
+                    DataT = parametrizacion.selectLevels(pac, "hierarchy desc")
+                    If DataT.Rows.Count > 0 Then
+                        codLevel = DataT(0)(3)
+                    Else
+                        codLevel = "0"
+                    End If
+
+                    DataT = Nothing
+                    DataT = parametrizacion.selectContents(pac, codLevel, , )
+                    If DataT.Rows.Count > 0 Then
+                        cmbSubActividad.Items.Clear()
+                        cmbSubActividad.DataTextField = "name"
+                        cmbSubActividad.DataValueField = "code"
+                        cmbSubActividad.DataSource = DataT
+                        cmbSubActividad.DataBind()
+                        cmbSubActividad.Items.Insert(0, New ListItem("---Seleccione---", ""))
+
+                        cmbSubActividadMetaMdl.Items.Clear()
+                        cmbSubActividadMetaMdl.DataTextField = "name"
+                        cmbSubActividadMetaMdl.DataValueField = "code"
+                        cmbSubActividadMetaMdl.DataSource = DataT
+                        cmbSubActividadMetaMdl.DataBind()
+                        cmbSubActividadMetaMdl.Items.Insert(0, New ListItem("---Seleccione---", ""))
+                    End If
+                End If
+
+                DataT = Nothing
+                DataT = parametrizacion.selectGoals(pac)
+                If DataT.Rows.Count > 0 Then
+                    tblMetas.DataSource = DataT
+                    tblMetas.DataBind()
+                    tblMetas.UseAccessibleHeader = True
+                    tblMetas.HeaderRow.TableSection = TableRowSection.TableHeader
+                Else
+                    tblMetas.DataSource = Nothing
+                    tblMetas.DataBind()
+                End If
+            Else
+                tblMetas.DataSource = Nothing
+                tblMetas.DataBind()
+            End If
+
+            lblIdMeta.Text = String.Empty
         Catch ex As Exception
             lblError.Text = ex.Message
             lblError.Visible = True
@@ -685,24 +982,46 @@
         Script &= " </script>"
         ScriptManager.RegisterStartupScript(Me, GetType(Page), "swal", Script, False)
     End Sub
+
+    Public Sub alertaMdl(ByVal mensaje As String, ByVal subMensaje As String, ByVal tipo As String, ByVal modal As String, Optional foco As String = "")
+        Dim Script As String = "<script type='text/javascript'> swal({title:'" + mensaje.Replace("'", " | ") + "', text:'" + subMensaje.Replace("'", " | ") + "' , type:'" + tipo + "', confirmButtonText:'OK'})"
+        If foco.Trim <> "" Then
+            Script &= ".then((result) => {if (result.value) {document.getElementById('" + foco + "').focus();}});"
+        End If
+        Script &= " $(window).on('load', function () {
+                        $('#" & modal & "').modal('show');
+                    });"
+        Script &= " </script>"
+        ScriptManager.RegisterStartupScript(Me, GetType(Page), "swal", Script, False)
+    End Sub
+
     Sub pestaña(index As Integer)
         btnPac.Attributes.Add("class", "")
         btnNiveles.Attributes.Add("class", "")
         btnPlanAccion.Attributes.Add("class", "")
+        btnMetas.Attributes.Add("class", "")
 
         Select Case index
             Case 1
                 btnPac.Attributes.Add("class", "nav-link active")
                 btnNiveles.Attributes.Add("class", "nav-link")
                 btnPlanAccion.Attributes.Add("class", "nav-link")
+                btnMetas.Attributes.Add("class", "nav-link")
             Case 2
                 btnNiveles.Attributes.Add("class", "nav-link active")
                 btnPac.Attributes.Add("class", "nav-link")
                 btnPlanAccion.Attributes.Add("class", "nav-link")
+                btnMetas.Attributes.Add("class", "nav-link")
             Case 3
                 btnPlanAccion.Attributes.Add("class", "nav-link active")
                 btnPac.Attributes.Add("class", "nav-link")
                 btnNiveles.Attributes.Add("class", "nav-link")
+                btnMetas.Attributes.Add("class", "nav-link")
+            Case 4
+                btnMetas.Attributes.Add("class", "nav-link active")
+                btnPac.Attributes.Add("class", "nav-link")
+                btnNiveles.Attributes.Add("class", "nav-link")
+                btnPlanAccion.Attributes.Add("class", "nav-link")
         End Select
     End Sub
 
@@ -714,10 +1033,11 @@
             txtYearInicial.Text = String.Empty
             txtCantYears.Text = String.Empty
             txtYearFinal.Text = String.Empty
+
             txtNombreNiv.Text = String.Empty
-            'txtPesoNiv.Text = String.Empty
             tblNiveles.DataSource = Nothing
             tblNiveles.DataBind()
+
             cmbNiveles.Items.Clear()
             cmbSubNivel.Items.Clear()
             txtNombrePlanAcc.Text = String.Empty
@@ -734,12 +1054,28 @@
 
             pnlSubNivel.Visible = False
 
+            limpiarMetas()
+
             Session("niveles") = Nothing
             Session("pac") = Nothing
         Catch ex As Exception
             lblError.Text = ex.Message
             lblError.Visible = True
         End Try
+    End Sub
+    Public Sub limpiarMetas()
+        lblIdMeta.Text = String.Empty
+        txtNombreMeta.Text = String.Empty
+        cmbTipoMeta.SelectedIndex = 0
+        cmbSubActividad.SelectedIndex = 0
+        txtLineaBaseMeta.Text = String.Empty
+        txtPriYearMeta.Text = String.Empty
+        txtSegYearMeta.Text = String.Empty
+        txtTerYearMeta.Text = String.Empty
+        txtCuaYearMeta.Text = String.Empty
+        cmbResponsable.SelectedIndex = 0
+        cmbAlimentador.SelectedIndex = 0
+        cargarMetas(lblPac.Text.Trim, 0)
     End Sub
 
     Public Sub calcularYearFinal()
@@ -757,6 +1093,8 @@
             lblError.Visible = True
         End Try
     End Sub
+
+
 
 #End Region
 

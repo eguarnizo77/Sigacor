@@ -12093,7 +12093,7 @@ a:focus {
 
 .bg-login-image {
     background: url('../img/logo_inicioBLACO.png');
-    background-position: center;
+    background-position: top;
     background-repeat: no-repeat;
 }
 
@@ -12635,4 +12635,13 @@ body.sidebar-toggled footer.sticky-footer {
 .lblModal {
     color: #337270;
     font-weight: 700;
+}
+
+.tituloCard {
+    height: 60px;
+    border-radius: 10px;
+    box-shadow: 4px 4px 8px #949494;
+    padding: 11px;
+    background: #5c588b;
+    color: white;
 }

@@ -73,9 +73,15 @@ Public Class clParametrizacion
         Return Data.OpenData(QRY)
     End Function
 
-    Public Function selectLevelsFila(ByVal pac_id As String, ByVal hierarchy As String) As DataRow
+    Public Function selectLevelsFila(ByVal pac_id As String, ByVal hierarchy As String, Optional ByVal name As String = "") As DataRow
 
         QRY = "select id, name, pac_id, hierarchy, state from levels where pac_id = " & pac_id & " and hierarchy = '" & hierarchy & "'"
+
+        If name <> String.Empty Then
+            QRY &= "and name = '" & name & "'"
+        End If
+
+        QRY &= "and state = 'A' "
 
         Return Data.OpenRow(QRY)
     End Function
@@ -157,6 +163,109 @@ Public Class clParametrizacion
         QRY = "update contents set state = '" & state & "' where id = '" & id & "' "
 
         Return Data.Execute(QRY)
+    End Function
+
+#End Region
+
+#Region "Goals"
+    Public Function insertGoals(ByVal pac_id As String, ByVal name As String, ByVal type_goal As String,
+                                ByVal subactivity As String, ByVal line_base As String, ByVal value_one_year As String,
+                                ByVal value_two_year As String, ByVal value_three_year As String, ByVal value_four_year As String,
+                                ByVal responsable_id As String, ByVal feeder_id As String, ByVal state As String) As Integer
+
+        QRY = "insert into goals (pac_id, name, type_goal, subactivity, line_base, value_one_year, value_two_year,
+               value_three_year, value_four_year, responsable_id, feeder_id, state) values ( " & pac_id & ", 
+               '" & name & "', '" & type_goal & "', '" & subactivity & "', " & line_base & ", " & value_one_year & ", 
+               " & value_two_year & ", " & value_three_year & ",  " & value_four_year & ", '" & responsable_id & "',
+               '" & feeder_id & "', '" & state & "') "
+
+        Return Data.Execute(QRY)
+    End Function
+
+    Public Function updateGoals(ByVal id As String, ByVal name As String, ByVal type_goal As String,
+                                ByVal subactivity As String, ByVal line_base As String, ByVal value_one_year As String,
+                                ByVal value_two_year As String, ByVal value_three_year As String, ByVal value_four_year As String,
+                                ByVal responsable_id As String, ByVal feeder_id As String) As Integer
+
+        QRY = "update goals  set name = '" & name & "', type_goal = '" & type_goal & "', subactivity = '" & subactivity & "',
+               line_base = " & line_base & ", value_one_year =  " & value_one_year & ",  value_two_year = " & value_two_year & ",
+               value_three_year = " & value_three_year & ", value_four_year =  " & value_four_year & ", 
+               responsable_id = '" & responsable_id & "', feeder_id = '" & feeder_id & "' where  id = " & id
+
+        Return Data.Execute(QRY)
+    End Function
+
+    Public Function updateStateGoals(ByVal id As String) As Integer
+
+        QRY = "update goals  set state = 'I' where  id = " & id
+
+        Return Data.Execute(QRY)
+    End Function
+
+    Public Function selectGoals() As DataTable
+
+        QRY = "select * from goals where state = 'A' order by id"
+
+        Return Data.OpenData(QRY)
+    End Function
+
+    Public Function selectGoals(ByVal pac_id As String) As DataTable
+
+        QRY = "select * from goals where pac_id = " & pac_id & " and state = 'A' "
+
+        Return Data.OpenData(QRY)
+    End Function
+
+    Public Function selectGoals(ByVal pac_id As String, ByVal id As String) As DataRow
+
+        QRY = "select * from goals where pac_id = " & pac_id & " and id = " & id & " and state = 'A' "
+
+        Return Data.OpenRow(QRY)
+    End Function
+
+#End Region
+
+#Region "Curriculum"
+
+    Public Function insertCurriculum(ByVal goal_id As String, ByVal initials As String, ByVal description As String,
+                                     ByVal definition As String, ByVal method As String, ByVal formulas As String,
+                                     ByVal variables As String, ByVal observations As String, ByVal geographic As String,
+                                     ByVal periodicity As String, ByVal state As String) As Integer
+
+        QRY = "insert into curriculum (goal_id, initials, description, definition, method, formulas, variables,
+               observations, geographic, periodicity, state) values ( " & goal_id & ", 
+               '" & initials & "', '" & description & "', '" & definition & "', '" & method & "', '" & formulas & "', 
+               '" & variables & "', '" & observations & "',  '" & geographic & "', '" & periodicity & "',
+               '" & state & "') "
+
+        Return Data.Execute(QRY)
+    End Function
+
+    Public Function updateCurriculum(ByVal goal_id As String, ByVal initials As String, ByVal description As String,
+                                     ByVal definition As String, ByVal method As String, ByVal formulas As String,
+                                     ByVal variables As String, ByVal observations As String, ByVal geographic As String,
+                                     ByVal periodicity As String) As Integer
+
+        QRY = "update curriculum set initials = '" & initials & "', description = '" & description & "', definition = '" & definition & "',
+               method = '" & method & "', formulas =  '" & formulas & "',  variables = '" & variables & "',
+               observations = '" & observations & "', geographic =  '" & geographic & "', 
+               periodicity = '" & periodicity & "' where goal_id = " & goal_id
+
+        Return Data.Execute(QRY)
+    End Function
+
+    Public Function updateStateCurriculum(ByVal id As String) As Integer
+
+        QRY = "update curriculum set state = 'I' where  id = " & id
+
+        Return Data.Execute(QRY)
+    End Function
+
+    Public Function selectCurriculum(ByVal goal_id As String) As DataRow
+
+        QRY = "select * from curriculum where goal_id = " & goal_id & " and state = 'A' "
+
+        Return Data.OpenRow(QRY)
     End Function
 
 #End Region

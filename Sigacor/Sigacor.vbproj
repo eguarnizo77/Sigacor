@@ -104,12 +104,6 @@
     <Content Include="Componentes\img\LOGOS-ICONTEC-CERTIFICACIONES-2020.png" />
     <Content Include="Componentes\img\logo_inicioBLACO.png" />
     <Content Include="Componentes\img\sigaporverde.png" />
-    <Content Include="Componentes\img\undraw_posting_photo.svg" />
-    <Content Include="Componentes\img\undraw_profile.svg" />
-    <Content Include="Componentes\img\undraw_profile_1.svg" />
-    <Content Include="Componentes\img\undraw_profile_2.svg" />
-    <Content Include="Componentes\img\undraw_profile_3.svg" />
-    <Content Include="Componentes\img\undraw_rocket.svg" />
     <Content Include="Componentes\img\usuario-01.png" />
     <Content Include="Componentes\js\demo\chart-area-demo.js" />
     <Content Include="Componentes\js\demo\chart-bar-demo.js" />
@@ -2016,6 +2010,7 @@
     <Content Include="Index.aspx" />
     <Content Include="Inicio.aspx" />
     <Content Include="Login.aspx" />
+    <Content Include="Parametrizacion\HojaVida.aspx" />
     <Content Include="Parametrizacion\NuevoRegistro.aspx" />
     <Content Include="Parametrizacion\Parametrizacion.aspx" />
     <Content Include="Web.config" />
@@ -2066,6 +2061,13 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Parametrizacion\HojaVida.aspx.designer.vb">
+      <DependentUpon>HojaVida.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Parametrizacion\HojaVida.aspx.vb">
+      <DependentUpon>HojaVida.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="Parametrizacion\NuevoRegistro.aspx.designer.vb">
       <DependentUpon>NuevoRegistro.aspx</DependentUpon>

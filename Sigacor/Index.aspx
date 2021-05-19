@@ -24,7 +24,7 @@
                 <div class="col-lg-5">
                     <div class="text-right">
                         <a href="Login.aspx">
-                            <img src="Componentes/img/funcionarios-02.png" height="70" width="70" />
+                            <img src="Componentes/img/funcionarios-02.svg" height="100" width="120" />
                         </a>
                     </div>
                     <div class="form-group text-center">
@@ -45,17 +45,20 @@
                             <label class="tlPanel">
                                 BANCO DE
                                 <br />
-                                PROYECTOS</label>
+                                PROYECTOS
+                            </label>
                         </a>
                     </div>
                     <footer>
                         <div class="row">
-                            <div class="col-6 text-center">
-                                <img style="border-right: 2px solid #36523F" src="Componentes/img/cortolima.png" height="130" width="220" /><br />
-                                <img style="margin-top: -10%" src="Componentes/img/LOGOS-ICONTEC-CERTIFICACIONES-2020.png" height="30" width="110" />
+                            <div class="col-7 text-center">
+                                <img style="border-right: 2px solid #36523F" src="Componentes/img/cortolima.png" height="130" width="220" /><br />                                
                             </div>
-                            <div class="col-6 text-center">
+                            <div class="col-5 text-center">
                                 <br />
+                                <img class="mt-3" src="Componentes/img/LOGOS-ICONTEC-CERTIFICACIONES-2020.png" height="60" width="180" />                                
+                            </div>
+                            <div class="col-12 text-center mb-4"> 
                                 <label class="tlPanel">www.cortolima.gov.co</label><br />
                                 <a href="#" class="btn btn btnRedesociales btn-circle">
                                     <i class="fab fa-facebook-f"></i>
