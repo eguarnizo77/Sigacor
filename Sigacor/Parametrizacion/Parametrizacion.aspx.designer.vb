@@ -50,13 +50,13 @@ Partial Public Class Parametrizacion
     Protected WithEvents lblPac As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control lblNompac.
+    '''Control lblNomPac.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents lblNompac As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents lblNomPac As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control lblSlogan.

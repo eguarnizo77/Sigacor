@@ -13,7 +13,7 @@
                     <span class="icon text-white-50">
                         <i class="fas fa-plus"></i>
                     </span>
-                    <span class="text">Nueva Parametrización</span>
+                    <span class="text">Nuevo PAC</span>
                 </a>
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <span class="icon text-white-50" style="display: inline-block; padding: .375rem 0.75rem; background-color: #c9a811;">
@@ -37,19 +37,19 @@
                                     <ItemTemplate>
                                         <asp:LinkButton ID="lnkEditar" runat="server" data-placement="top"
                                             data-toggle="tooltip" Height="30px" Width="30px" CommandName="Editar"
-                                            Style="display: inline-grid" title="Editar pac" class="btn btn-success btn-circle">                                            
+                                            Style="display: inline-grid" title="Editar PAC" class="btn btn-success btn-circle">                                            
                                             <i class="fas fa-edit"></i>                                        
                                         </asp:LinkButton>
 
                                         <asp:LinkButton ID="lnkVisualizar" runat="server" data-placement="top"
                                             data-toggle="tooltip" Height="30px" Width="30px" CommandName="Visualizar"
-                                            Style="display: inline-grid" title="Ver pac" class="btn btn-success btn-circle">                                            
+                                            Style="display: inline-grid" title="Ver PAC" class="btn btn-success btn-circle">                                            
                                                 <i class="fas fa-eye"></i>                                                                                    
                                         </asp:LinkButton>
 
                                         <asp:LinkButton ID="lnkEliminar" runat="server" data-placement="top"
                                             data-toggle="tooltip" Height="30px" Width="30px" CommandName="Eliminar"
-                                            Style="display: inline-grid" title="Eliminar pac" class="btn btn-success btn-circle">                                            
+                                            Style="display: inline-grid" title="Eliminar PAC" class="btn btn-success btn-circle">                                            
                                             <i class="fas fa-backspace"></i>
                                         </asp:LinkButton>
 
@@ -77,20 +77,20 @@
                 </div>
                 <div class="modal-body">
                     <div class="col-12 mb-2 border-bottom-info">
-                        <label class="lblModal">Pac</label>
+                        <label class="lblModal">PAC</label>
                     </div>
                     <div class="row mt-4 mb-2">
                         <div class="col-6">
-                            <label class="lblModal">N° Pac</label>
+                            <label class="lblModal">N° PAC</label>
                         </div>
                         <div class="col-6">
-                            <label class="lblModal">Nombre del pac</label>
+                            <label class="lblModal">Nombre del PAC</label>
                         </div>
                         <div class="col-6">
                             <asp:Label ID="lblPac" runat="server"></asp:Label>
                         </div>
                         <div class="col-6">
-                            <asp:Label ID="lblNompac" runat="server"></asp:Label>
+                            <asp:Label ID="lblNomPac" runat="server"></asp:Label>
                         </div>
 
                         <div class="col-4">
@@ -174,7 +174,7 @@
             })
             swalWithBootstrapButtons({
                 title: 'Verificación',
-                text: "¿Desea eliminar el pac?",
+                text: "¿Desea eliminar el PAC?",
                 type: 'info',
                 showCancelButton: true,
                 confirmButtonText: 'Si',
@@ -188,7 +188,7 @@
                     result.dismiss === swal.DismissReason.cancel
                 ) {
                     swalWithBootstrapButtons(
-                        'Has cancelado la eliminación del pac',
+                        'Has cancelado la eliminación del PAC',
                         '',
                         'error'
                     )

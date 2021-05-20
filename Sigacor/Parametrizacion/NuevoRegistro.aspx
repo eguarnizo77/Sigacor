@@ -61,8 +61,8 @@
                             </div>
                         </div>
                         <div class="col-12 text-center">
-                            <asp:LinkButton ID="btnSigPac" runat="server" class="btn btn-primary">Grabar Pac</asp:LinkButton>
-                            <asp:LinkButton ID="btnActPac" runat="server" class="btn btn-primary">Actualizar Pac</asp:LinkButton>
+                            <asp:LinkButton ID="btnSigPac" runat="server" class="btn btn-primary">Grabar PAC</asp:LinkButton>
+                            <asp:LinkButton ID="btnActPac" runat="server" class="btn btn-primary">Actualizar PAC</asp:LinkButton>
                         </div>
                     </div>
                 </div>

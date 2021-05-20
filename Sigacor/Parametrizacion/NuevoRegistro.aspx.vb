@@ -496,7 +496,7 @@
     Private Sub btnSigPac_Click(sender As Object, e As EventArgs) Handles btnSigPac.Click
         Try
             If txtNomPac.Text = String.Empty Then
-                alerta("Advertencia", "Ingrese el nombre el pac", "info", "contenedor2_txtNomPac")
+                alerta("Advertencia", "Ingrese el nombre el PAC", "info", "contenedor2_txtNomPac")
                 Exit Sub
             End If
             If txtSlogan.Text = String.Empty Then
@@ -516,13 +516,13 @@
                                          txtYearFinal.Text.Trim, txtCantYears.Text.Trim,
                                          "A", lblPac.Text.Trim) > 0 Then
 
-                alerta("Se ha actualizado el pac correctamente", "Pac:  " & lblPac.Text.Trim, "success", "")
+                alerta("Se ha actualizado el pac correctamente", "PAC:  " & lblPac.Text.Trim, "success", "")
             Else
                 parametrizacion.insertPac(txtNomPac.Text.Trim, txtSlogan.Text.Trim, txtYearInicial.Text.Trim,
                                           txtYearFinal.Text.Trim, txtCantYears.Text.Trim,
                                           "A")
                 lblPac.Text = parametrizacion.consecutivoPac
-                alerta("Se ha creado el pac correctamente", "Pac:  " & lblPac.Text.Trim, "success", "")
+                alerta("Se ha creado el PAC correctamente", "Pac:  " & lblPac.Text.Trim, "success", "")
             End If
 
             pestaña(2)
@@ -591,7 +591,7 @@
     Private Sub btnSigPlanAcc_Click(sender As Object, e As EventArgs) Handles btnSigPlanAcc.Click
         Try
             If lblPac.Text = String.Empty Then
-                alerta("Advertencia", "El pac no esta registrado", "info", "")
+                alerta("Advertencia", "El PAC no esta registrado", "info", "")
                 btnPac_Click(Nothing, Nothing)
                 Exit Sub
             End If
@@ -599,7 +599,7 @@
                 alerta("Advertencia", "Ingrese la parametrización de plan de acción cuatrienal", "info", "")
                 Exit Sub
             End If
-
+            cargarMetas(lblPac.Text.Trim, 1)
             btnMetas_Click(Nothing, Nothing)
         Catch ex As Exception
             lblError.Text = ex.Message
@@ -687,6 +687,7 @@
                 txtPesoPlanAcc.Text = String.Empty
 
                 cargarPlanAccion(lblPac.Text.Trim)
+                cargarMetas(lblPac.Text.Trim, 1)
                 alerta("Se ha creado el item correctamente", "", "success")
             Else
                 alerta("Advertencia", "Se genero un error al grabar", "error", "")
