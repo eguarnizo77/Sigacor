@@ -147,9 +147,21 @@ insert into periodicity(name, description, state) values ('M',  'Mensual', 'A');
 insert into periodicity(name, description, state) values ('S', 'Semanal ', 'A');
 
 
+create table report (
+	id int PRIMARY KEY IDENTITY(1, 1),
+	goal_id int,
+	year_current int,
+	value_progress decimal,
+	activities_developed text,
+	date_reg date,
+	array_archivos text,
+	array_imagenes text,
+	array_link text,
+	state nvarchar(255)
+);
 
-
-
+ alter table goals add value_progress decimal default 0;
+update goals set value_progress = 0;
 
 
 

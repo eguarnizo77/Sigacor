@@ -401,7 +401,7 @@
                     txtPriYearMetaMdl.Text = Fila("value_one_year")
                     txtSegYearMetaMdl.Text = Fila("value_two_year")
                     txtTercYearMetaMdl.Text = Fila("value_three_year")
-                    txtPCuartYearMetaMdl.Text = Fila("value_four_year")
+                    txtCuartYearMetaMdl.Text = Fila("value_four_year")
                     cmbResponsableMdl.SelectedValue = Fila("responsable_id")
                     cmbAlimentadorMdl.SelectedValue = Fila("feeder_id")
                 End If
@@ -663,13 +663,16 @@
                 subNivel = String.Empty
             End If
 
-            Dim code As String
+            Dim code, array As String
 
             DataT = parametrizacion.selectContents(lblPac.Text.Trim, cmbNiveles.SelectedValue.Trim - 1, "", subNivel)
             If DataT.Rows.Count > 0 Then
                 code = DataT(0)(3) & "." & txtCodigo.Text.Trim
+                DataT(0)(9) = CStr(DataT(0)(9)).Substring(0, CStr(DataT(0)(9)).Length - 1)
+                array = CStr(DataT(0)(9)) & ", " & cmbNiveles.SelectedItem.ToString & ":" & txtCodigo.Text.Trim & "]"
             Else
                 code = txtCodigo.Text.Trim
+                array = "[" & cmbNiveles.SelectedItem.ToString() & ":" & txtCodigo.Text.Trim & "]"
             End If
             DataT = Nothing
             DataT = parametrizacion.selectContents(lblPac.Text.Trim, code)
@@ -680,7 +683,7 @@
 
 
             If parametrizacion.insertContents(lblPac.Text.Trim, cmbNiveles.SelectedValue, code, cmbNiveles.SelectedItem.ToString.Trim, subNivel,
-                                           txtNombrePlanAcc.Text.Trim, txtPesoPlanAcc.Text.Trim, "A") > 0 Then
+                                           txtNombrePlanAcc.Text.Trim, txtPesoPlanAcc.Text.Trim, "A", array) > 0 Then
 
                 txtCodigo.Text = String.Empty
                 txtNombrePlanAcc.Text = String.Empty
@@ -789,7 +792,7 @@
                 alertaMdl("Advertencia", "Ingrese la cantidad para el tercer año", "info", "mdlEditarMeta", "contenedor2_txtTercYearMetaMdl")
                 Exit Sub
             End If
-            If txtPCuartYearMetaMdl.Text = String.Empty Then
+            If txtCuartYearMetaMdl.Text = String.Empty Then
                 alertaMdl("Advertencia", "Ingrese la cantidad para el cuarto año", "info", "mdlEditarMeta", "contenedor2_txtPCuartYearMetaMdl")
                 Exit Sub
             End If
@@ -804,7 +807,7 @@
 
             If parametrizacion.updateGoals(lblIdMeta.Text.Trim, txtNombreMetaMdl.Text.Trim, cmbTipoMetaMdl.SelectedValue,
                                            cmbSubActividadMetaMdl.SelectedValue, txtLineaBaseMetaMdl.Text.Trim, txtPriYearMetaMdl.Text.Trim,
-                                           txtSegYearMetaMdl.Text.Trim, txtTercYearMetaMdl.Text.Trim, txtPCuartYearMetaMdl.Text.Trim,
+                                           txtSegYearMetaMdl.Text.Trim, txtTercYearMetaMdl.Text.Trim, txtCuartYearMetaMdl.Text.Trim,
                                            cmbResponsableMdl.SelectedValue.Trim, cmbAlimentadorMdl.SelectedValue.Trim) > 0 Then
 
                 alerta("Se ha actualizado correctamente la meta", "", "success", "")
@@ -1087,7 +1090,7 @@
             If txtYearInicial.Text <> String.Empty Then yearInicial = CInt(txtYearInicial.Text.Trim)
             If txtCantYears.Text <> String.Empty Then cantidadYears = CInt(txtCantYears.Text.Trim)
 
-            txtYearFinal.Text = yearInicial + cantidadYears
+            txtYearFinal.Text = yearInicial + (cantidadYears - 1)
 
         Catch ex As Exception
             lblError.Text = ex.Message

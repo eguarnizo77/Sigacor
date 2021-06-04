@@ -37,7 +37,7 @@
                                     <ItemTemplate>
                                         <asp:LinkButton ID="lnkEditar" runat="server" data-placement="top"
                                             data-toggle="tooltip" Height="30px" Width="30px" CommandName="Editar"
-                                            Style="display: inline-grid" title="Editar PAC" class="btn btn-success btn-circle">                                            
+                                            Style="display: inline-grid" title="Editar PAC" class="btn btn-success btn-circle">                                           
                                             <i class="fas fa-edit"></i>                                        
                                         </asp:LinkButton>
 

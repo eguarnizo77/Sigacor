@@ -54,7 +54,7 @@ Public Class Login
         Session("Rol") = Fila("rol_id")
         Session("NomRol") = Fila("description")
 
-        Response.Redirect("/Parametrizacion/Parametrizacion.aspx")
+        Response.Redirect("Parametrizacion/Parametrizacion.aspx")
     End Sub
 
 #End Region

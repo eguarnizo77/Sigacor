@@ -66,6 +66,20 @@
         "info": false
     });
 
+    $('#contenedor2_tblArchivos').DataTable({
+        "paging": false,
+        "ordering": false,
+        "searching": false,
+        "info": false
+    });
+
+    $('#contenedor2_tblImagenes').DataTable({
+        "paging": false,
+        "ordering": false,
+        "searching": false,
+        "info": false
+    });
+
     $('#contenedor2_tblPac').DataTable(script);
 
     

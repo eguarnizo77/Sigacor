@@ -143,6 +143,9 @@
                 tblPac.DataSource = DataT
                 tblPac.DataBind()
                 tblPac.HeaderRow.TableSection = TableRowSection.TableHeader
+            Else
+                tblPac.DataSource = Nothing
+                tblPac.DataBind()
             End If
 
         Catch ex As Exception
@@ -170,6 +173,8 @@
         Script &= " </script>"
         ScriptManager.RegisterStartupScript(Me, GetType(Page), "swal", Script, False)
     End Sub
+
+
 
 #End Region
 

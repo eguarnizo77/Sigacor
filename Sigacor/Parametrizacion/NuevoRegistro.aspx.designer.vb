@@ -536,13 +536,13 @@ Partial Public Class NuevoRegistro
     Protected WithEvents txtTercYearMetaMdl As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''Control txtPCuartYearMetaMdl.
+    '''Control txtCuartYearMetaMdl.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents txtPCuartYearMetaMdl As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtCuartYearMetaMdl As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
     '''Control cmbResponsableMdl.

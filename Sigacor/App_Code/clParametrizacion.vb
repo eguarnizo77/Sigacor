@@ -59,6 +59,13 @@ Public Class clParametrizacion
         Return Data.OpenRow(QRY)
     End Function
 
+    Public Function selectPacActivo() As DataRow
+
+        QRY = "select id, name, slogan, initial_year, final_year, number_years, state from pac where state = 'A'"
+
+        Return Data.OpenRow(QRY)
+    End Function
+
 #End Region
 
 #Region "Levels"
@@ -108,6 +115,20 @@ Public Class clParametrizacion
         Return Data.Execute(QRY)
     End Function
 
+    Public Function selectLinea(ByVal pac_id As String) As DataTable
+
+        QRY = "select * from contents where pac_id = " & pac_id & " and level_id = 1"
+
+        Return Data.OpenData(QRY)
+    End Function
+
+    Public Function selectLineaAgrupado(ByVal pac_id As String, ByVal subactivity As String) As DataTable
+
+        QRY = "select * from goals where subactivity like '" & subactivity & "%' and pac_id = " & pac_id
+
+        Return Data.OpenData(QRY)
+    End Function
+
 #End Region
 
 #Region "Contents"
@@ -143,11 +164,11 @@ Public Class clParametrizacion
     End Function
     Public Function insertContents(ByVal pac_id As String, ByVal level_id As String, ByVal code As String,
                                ByVal name_level As String, ByVal sublevel As String, ByVal name As String,
-                               ByVal weigth As String, ByVal state As String) As Integer
+                               ByVal weigth As String, ByVal state As String, ByVal array As String) As Integer
 
-        QRY = "insert into contents (pac_id, level_id, code, name_level, sublevel, name, weigth, state) values ( " &
+        QRY = "insert into contents (pac_id, level_id, code, name_level, sublevel, name, weigth, state, array) values ( " &
               "" & pac_id & ", " & level_id & ", '" & code & "', '" & name_level & "', '" & sublevel & "', " &
-              "'" & name & "', " & weigth & ",  '" & state & "') "
+              "'" & name & "', " & weigth & ",  '" & state & "', '" & array & "') "
 
         Return Data.Execute(QRY)
     End Function
@@ -174,10 +195,10 @@ Public Class clParametrizacion
                                 ByVal responsable_id As String, ByVal feeder_id As String, ByVal state As String) As Integer
 
         QRY = "insert into goals (pac_id, name, type_goal, subactivity, line_base, value_one_year, value_two_year,
-               value_three_year, value_four_year, responsable_id, feeder_id, state) values ( " & pac_id & ", 
+               value_three_year, value_four_year, responsable_id, feeder_id, state, value_progress) values ( " & pac_id & ", 
                '" & name & "', '" & type_goal & "', '" & subactivity & "', " & line_base & ", " & value_one_year & ", 
                " & value_two_year & ", " & value_three_year & ",  " & value_four_year & ", '" & responsable_id & "',
-               '" & feeder_id & "', '" & state & "') "
+               '" & feeder_id & "', '" & state & "', 0) "
 
         Return Data.Execute(QRY)
     End Function
@@ -219,6 +240,19 @@ Public Class clParametrizacion
     Public Function selectGoals(ByVal pac_id As String, ByVal id As String) As DataRow
 
         QRY = "select * from goals where pac_id = " & pac_id & " and id = " & id & " and state = 'A' "
+
+        Return Data.OpenRow(QRY)
+    End Function
+
+    Public Function selectGoalsFila(ByVal id As String) As DataRow
+
+        QRY = "select * from goals where  id = " & id & " and state = 'A' "
+
+        Return Data.OpenRow(QRY)
+    End Function
+    Public Function updateValue_progress(ByVal id As String, ByVal value_progress As String) As DataRow
+
+        QRY = "update goals set value_progress = (value_progress + " & value_progress & ") where id = " & id
 
         Return Data.OpenRow(QRY)
     End Function
@@ -269,4 +303,33 @@ Public Class clParametrizacion
     End Function
 
 #End Region
+
+#Region "report"
+    Public Function insertReport(ByVal id_goal As String, ByVal year_current As String, ByVal value_progress As String,
+                                 ByVal activities_developed As String, ByVal date_reg As String, ByVal state As String) As Integer
+        Dim row As DataRow
+
+        QRY = "insert into report(goal_id, year_current, value_progress, activities_developed, 
+               date_reg, state) values (" & id_goal & "," & year_current & ",
+               " & value_progress & ", '" & activities_developed & "', '" & date_reg & "', '" & state & "')"
+
+        Data.Execute(QRY)
+
+        row = Data.OpenRow("select id from report order by id desc")
+        If row IsNot Nothing Then
+            insertReport = CInt(row("id"))
+        End If
+
+        Return insertReport
+    End Function
+
+    Public Function updateAdjuntosReport(ByVal campo As String, ByVal valor As String, ByVal id As String) As Integer
+
+        QRY = "update report set " & campo & " = '" & valor & "' where id =" & id
+
+        Return Data.Execute(QRY)
+    End Function
+
+#End Region
+
 End Class

@@ -12093,7 +12093,7 @@ a:focus {
 
 .bg-login-image {
     background: url('../img/logo_inicioBLACO.png');
-    background-position: center;
+    background-position: top;
     background-repeat: no-repeat;
 }
 

@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-md-4 col-xs-12"></div>
             <div class="col-md-4 col-xs-12">
-                <nav class="nav nav-pills nav-justified tituloCard">
+                <nav class="nav nav-pills nav-justified">
                     <div class="nav-link text-center">
                         <h4>HOJA DE VIDA</h4>
                     </div>
@@ -21,8 +21,13 @@
         <br />
         <br />
         <asp:Panel ID="pnlInfoHojaVida" runat="server" CssClass="row">
-
-            <div class="col-12 text-right">
+            <div class="col-2">
+                <h4>Metas</h4>
+            </div>
+            <div class="col-7">
+                <hr style="border-top: 3px solid rgba(0, 0, 0, .1);" />
+            </div>
+            <div class="col-3 text-right">
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <span class="icon text-white-50" style="display: inline-block; padding: .375rem 0.75rem; background-color: #c9a811;">
                         <i class="fas fa-filter"></i>
@@ -31,30 +36,29 @@
                         <asp:ListItem>Filtrar por </asp:ListItem>
                     </asp:DropDownList>
                 </div>
+            </div>
 
-                <div class="row mt-4">
-                    <div class="col-12 text-left" style="overflow-x: auto; overflow-y: auto;">
-                        <asp:GridView ID="tblMetas" runat="server" CssClass="sem table" Width="100%" AutoGenerateColumns="False">
-                            <Columns>
-                                <asp:BoundField DataField="id" HeaderText="id" />
-                                    <asp:BoundField DataField="type_goal" HeaderText="Tipo Meta" />
-                                    <asp:BoundField DataField="subactivity" HeaderText="Sub Activ." />
-                                    <asp:BoundField DataField="name" HeaderText="Nombre" />
-                                    <asp:BoundField DataField="line_base" HeaderText="Linea Base" />
-                                    <asp:TemplateField ItemStyle-HorizontalAlign="Center" HeaderStyle-Width="200px" HeaderText="Acciones">
-                                        <ItemTemplate>
-                                            <asp:LinkButton ID="lnkMeta" runat="server" data-placement="top"
-                                                data-toggle="tooltip" Height="30px" Width="30px" CommandName="Seleccionar"
-                                                Style="display: inline-grid" title="Seleccionar meta" class="btn btn-success btn-circle">                                            
-                                                <i class="fa fa-arrow-right"></i>                                        
-                                            </asp:LinkButton>
-                                        </ItemTemplate>
-                                        <ItemStyle Width="20%" VerticalAlign="Middle" HorizontalAlign="Center" />
-                                    </asp:TemplateField>
-                            </Columns>
-                        </asp:GridView>
-                    </div>
-                </div>                
+            <div class="col-12 mt-4" style="overflow-x: auto; overflow-y: auto;">
+                <asp:GridView ID="tblMetass" runat="server" CssClass="sem table" Width="100%" AutoGenerateColumns="False">
+                    <Columns>
+                        <asp:BoundField DataField="id" HeaderText="id" />
+                        <asp:BoundField DataField="type_goal" HeaderText="Tipo Meta" />
+                        <asp:BoundField DataField="subactivity" HeaderText="Sub Activ." />
+                        <asp:BoundField DataField="name" HeaderText="Nombre" />
+                        <asp:BoundField DataField="line_base" HeaderText="Linea Base" />
+                        <asp:BoundField DataField="" HeaderText="Hoja de Vida" />
+                        <asp:TemplateField ItemStyle-HorizontalAlign="Center" HeaderStyle-Width="200px" HeaderText="Acciones">
+                            <ItemTemplate>
+                                <asp:LinkButton ID="lnkMeta" runat="server" data-placement="top"
+                                    data-toggle="tooltip" Height="30px" Width="30px" CommandName="Seleccionar"
+                                    Style="display: inline-grid" title="Seleccionar meta" class="btn btn-success btn-circle">                                            
+                                                <i class="fas fa-edit"></i>                                        
+                                </asp:LinkButton>
+                            </ItemTemplate>
+                            <ItemStyle Width="20%" VerticalAlign="Middle" HorizontalAlign="Center" />
+                        </asp:TemplateField>
+                    </Columns>
+                </asp:GridView>
             </div>
 
         </asp:Panel>

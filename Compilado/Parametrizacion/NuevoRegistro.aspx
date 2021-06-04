@@ -61,8 +61,8 @@
                             </div>
                         </div>
                         <div class="col-12 text-center">
-                            <asp:LinkButton ID="btnSigPac" runat="server" class="btn btn-primary">Grabar Pac</asp:LinkButton>
-                            <asp:LinkButton ID="btnActPac" runat="server" class="btn btn-primary">Actualizar Pac</asp:LinkButton>
+                            <asp:LinkButton ID="btnSigPac" runat="server" class="btn btn-primary">Grabar PAC</asp:LinkButton>
+                            <asp:LinkButton ID="btnActPac" runat="server" class="btn btn-primary">Actualizar PAC</asp:LinkButton>
                         </div>
                     </div>
                 </div>
@@ -404,7 +404,7 @@
                         <div class="col-2">
                             <div class="form-group">
                                 <label>Cuarto año</label>
-                                <asp:TextBox TextMode="Number" ID="txtPCuartYearMetaMdl" class="form-control" runat="server" AutoComplete="Off"></asp:TextBox>
+                                <asp:TextBox TextMode="Number" ID="txtCuartYearMetaMdl" class="form-control" runat="server" AutoComplete="Off"></asp:TextBox>
                             </div>
                         </div>
                         <div class="col-3 mt-4">

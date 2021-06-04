@@ -98,13 +98,13 @@
     <Content Include="Componentes\img\Artboard7.png" />
     <Content Include="Componentes\img\Artboard8.png" />
     <Content Include="Componentes\img\cortolima.png" />
-    <Content Include="Componentes\img\funcionarios-02.png" />
+    <Content Include="Componentes\img\funcionarios-02.svg" />
     <Content Include="Componentes\img\imagen_cortolima.png" />
     <Content Include="Componentes\img\logoPanel.png" />
     <Content Include="Componentes\img\LOGOS-ICONTEC-CERTIFICACIONES-2020.png" />
     <Content Include="Componentes\img\logo_inicioBLACO.png" />
     <Content Include="Componentes\img\sigaporverde.png" />
-    <Content Include="Componentes\img\usuario-01.png" />
+    <Content Include="Componentes\img\usuario-01.svg" />
     <Content Include="Componentes\js\demo\chart-area-demo.js" />
     <Content Include="Componentes\js\demo\chart-bar-demo.js" />
     <Content Include="Componentes\js\demo\chart-pie-demo.js" />
@@ -2013,6 +2013,7 @@
     <Content Include="Parametrizacion\HojaVida.aspx" />
     <Content Include="Parametrizacion\NuevoRegistro.aspx" />
     <Content Include="Parametrizacion\Parametrizacion.aspx" />
+    <Content Include="Parametrizacion\Seguimiento.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -2081,6 +2082,13 @@
     </Compile>
     <Compile Include="Parametrizacion\Parametrizacion.aspx.vb">
       <DependentUpon>Parametrizacion.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Parametrizacion\Seguimiento.aspx.designer.vb">
+      <DependentUpon>Seguimiento.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Parametrizacion\Seguimiento.aspx.vb">
+      <DependentUpon>Seguimiento.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="Principal.Master.designer.vb">
