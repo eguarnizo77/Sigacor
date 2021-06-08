@@ -8,6 +8,7 @@
     <script src="../Componentes/vendor/jquery/jquery.min.js"></script>
 
     <div class="container">
+
         <nav class="nav nav-pills nav-justified" style="height: 60px; border-radius: 10px; box-shadow: 4px 4px 8px #bdbdbd;">
             <asp:LinkButton ID="btnPac" runat="server" class="nav-link">
                 <span class="btn btn-primary bg-white text-black-50 btn-circle" style="margin-right: 10px;">1</span>

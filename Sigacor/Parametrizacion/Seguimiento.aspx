@@ -17,6 +17,20 @@
             </div>
             <div class="col-md-4 col-xs-12"></div>
         </div>
+
+
+        <nav class="nav nav-pills nav-justified mt-3" style="height: 60px; border-radius: 10px; box-shadow: 4px 4px 8px #bdbdbd;">
+            <asp:LinkButton ID="navActividades" runat="server" class="nav-link">
+                <span class="btn btn-primary bg-white text-black-50 btn-circle" style="margin-right: 10px;">1</span>
+                Actividades desarrolladas</asp:LinkButton>
+            <asp:LinkButton ID="navEvidencias" runat="server" class="nav-link">
+                <span class="btn btn-primary bg-white text-black-50 btn-circle" style="margin-right: 10px;">2</span>
+                Evidencias</asp:LinkButton>
+
+        </nav>
+        <br />
+        <br />
+
         <asp:Panel ID="Panel" runat="server" class="card mb-4 py-3 border-bottom-info" Style="box-shadow: 4px 4px 8px #bdbdbd; padding: 2rem;">
             <asp:Panel ID="pnlMetas" runat="server" class="card mb-4 py-3 border-bottom-info">
                 <div class="row">
@@ -90,7 +104,7 @@
                                 <asp:TextBox ID="txtCuartYear" class="form-control" runat="server" AutoComplete="Off" ReadOnly="true"></asp:TextBox>
                             </div>
                         </div>
-                        
+
                         <div class="col-3"></div>
                         <div class="col-3">
                             <div class="form-group">
@@ -135,9 +149,20 @@
                         <div class="col-5 mt-4">
                             <asp:LinkButton ID="btnVisualizarHojaVida" runat="server" class="btn btn-primary">Visualizar hoja de vida</asp:LinkButton>
                         </div>
-                        <div class="col-4">
-                            <hr style="border-top: 3px solid rgba(0, 0, 0, .1);" />
-                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mt-4 text-center">
+                        <asp:LinkButton ID="btnGrabar" runat="server" class="btn btn-primary">Grabar</asp:LinkButton>
+                        <asp:LinkButton ID="btnLimpiar" runat="server" class="btn btn-primary">Limpiar</asp:LinkButton>
+                        <asp:LinkButton ID="btnCancelar" runat="server" class="btn btn-primary">Cancelar</asp:LinkButton>
+                    </div>
+                </div>
+            </asp:Panel>
+
+            <asp:Panel ID="pnlEvidencias" runat="server" class="card mb-4 py-3 border-bottom-info">
+                <div class="card-body">
+                    <div class="row">
                         <div class="col-4">
                             <hr style="border-top: 3px solid rgba(0, 0, 0, .1);" />
                         </div>
@@ -158,16 +183,13 @@
                                 Links
                             </button>
                         </div>
+                        <div class="col-12 mt-4 text-center">
+                            <asp:LinkButton ID="btnAtras" runat="server" class="btn btn-primary">Atrás</asp:LinkButton>                            
+                        </div>
                     </div>
                 </div>
             </asp:Panel>
-            <div class="row">
-                <div class="col-12 mt-4 text-center">
-                    <asp:LinkButton ID="btnGrabar" runat="server" class="btn btn-primary">Grabar</asp:LinkButton>
-                    <asp:LinkButton ID="btnLimpiar" runat="server" class="btn btn-primary">Limpiar</asp:LinkButton>
-                    <asp:LinkButton ID="btnCancelar" runat="server" class="btn btn-primary">Cancelar</asp:LinkButton>
-                </div>
-            </div>
+
         </asp:Panel>
         <asp:Label ID="lblError" runat="server" Text="lblError" Style="color: red;"></asp:Label>
     </div>
@@ -356,9 +378,10 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-12"><label>Cargue la imagen</label></div>
                         <div class="col-12">
-                            <div class="form-group">                               
+                            <label>Cargue la imagen</label></div>
+                        <div class="col-12">
+                            <div class="form-group">
                                 <asp:TextBox TextMode="MultiLine" Rows="5" ID="txtLinks" class="form-control" runat="server" AutoPostBack="true"></asp:TextBox>
                             </div>
                         </div>
@@ -372,50 +395,50 @@
     </div>
 
 
-        <asp:Button ID="CargarArchivo" runat="server" class="d-none" />
-        <asp:Button ID="CaragrImagen" runat="server" class="d-none" />
+    <asp:Button ID="CargarArchivo" runat="server" class="d-none" />
+    <asp:Button ID="CaragrImagen" runat="server" class="d-none" />
 
-        <script>
-            function abrirModal() {
-                $(window).on('load', function () {
-                    $('#mdlVisualizador').modal('show');
-                });
-            };
-            function abrirModalAdjutnosArch() {
-                $(window).on('load', function () {
-                    $('#mdlAdjArchivos').modal('show');
-                });
-            };
-            function abrirModalAdjutnosImg() {
-                $(window).on('load', function () {
-                    $('#mdlAdjImagenes').modal('show');
-                });
-            };
-            function abrirModalAdjutnosLink() {
-                $(window).on('load', function () {
-                    $('#mdlLinks').modal('show');
-                });
-            };
-            //document.getElementById('fake-file-button-browse').addEventListener('click', function () {
-            //    document.getElementById('contenedor2_fuArchivo').click();
-            //});
-
-            document.getElementById('contenedor2_fuArchivo').addEventListener('change', function () {
-                document.getElementById('contenedor2_txtArchivo').value = this.value;
-                document.getElementById('contenedor2_CargarArchivo').click();
+    <script>
+        function abrirModal() {
+            $(window).on('load', function () {
+                $('#mdlVisualizador').modal('show');
             });
-
-            document.getElementById('contenedor2_fuImagenes').addEventListener('change', function () {
-                document.getElementById('contenedor2_txtImagen').value = this.value;
-                document.getElementById('contenedor2_CaragrImagen').click();
+        };
+        function abrirModalAdjutnosArch() {
+            $(window).on('load', function () {
+                $('#mdlAdjArchivos').modal('show');
             });
+        };
+        function abrirModalAdjutnosImg() {
+            $(window).on('load', function () {
+                $('#mdlAdjImagenes').modal('show');
+            });
+        };
+        function abrirModalAdjutnosLink() {
+            $(window).on('load', function () {
+                $('#mdlLinks').modal('show');
+            });
+        };
+        //document.getElementById('fake-file-button-browse').addEventListener('click', function () {
+        //    document.getElementById('contenedor2_fuArchivo').click();
+        //});
 
-            window.onload = function () {
-                var pos = window.name || 0;
-                window.scrollTo(0, pos);
-            }
-            window.onunload = function () {
-                window.name = self.pageYOffset || (document.documentElement.scrollTop + document.body.scrollTop);
-            }
-        </script>
+        document.getElementById('contenedor2_fuArchivo').addEventListener('change', function () {
+            document.getElementById('contenedor2_txtArchivo').value = this.value;
+            document.getElementById('contenedor2_CargarArchivo').click();
+        });
+
+        document.getElementById('contenedor2_fuImagenes').addEventListener('change', function () {
+            document.getElementById('contenedor2_txtImagen').value = this.value;
+            document.getElementById('contenedor2_CaragrImagen').click();
+        });
+
+        window.onload = function () {
+            var pos = window.name || 0;
+            window.scrollTo(0, pos);
+        }
+        window.onunload = function () {
+            window.name = self.pageYOffset || (document.documentElement.scrollTop + document.body.scrollTop);
+        }
+    </script>
 </asp:Content>

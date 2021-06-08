@@ -14,6 +14,24 @@ Option Explicit On
 Partial Public Class Seguimiento
 
     '''<summary>
+    '''Control navActividades.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents navActividades As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''Control navEvidencias.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents navEvidencias As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
     '''Control Panel.
     '''</summary>
     '''<remarks>
@@ -201,6 +219,24 @@ Partial Public Class Seguimiento
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents btnCancelar As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''Control pnlEvidencias.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents pnlEvidencias As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''Control btnAtras.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnAtras As Global.System.Web.UI.WebControls.LinkButton
 
     '''<summary>
     '''Control lblError.

@@ -19,6 +19,8 @@ Public Class Seguimiento
 
                 lblError.Visible = False
 
+                navActividades_Click(Nothing, Nothing)
+
                 DataT = Nothing
                 DataT = fun.periodicity()
                 If DataT.Rows.Count > 0 Then
@@ -193,6 +195,30 @@ Public Class Seguimiento
 #End Region
 
 #Region "Click"
+
+#Region "Pestaña"
+    Private Sub navActividades_Click(sender As Object, e As EventArgs) Handles navActividades.Click
+        pnlMetas.Visible = True
+        pnlActividades.Visible = True
+        pnlInfoMetas.Visible = True
+        pnlEvidencias.Visible = False
+        pestaña(1)
+    End Sub
+
+    Private Sub navEvidencias_Click(sender As Object, e As EventArgs) Handles navEvidencias.Click
+        If idReport.Text = String.Empty Then
+            alerta("Advertencia", "Debe grabar la información de las actividades desarrolladas", "info")
+            navActividades_Click(Nothing, Nothing)
+            Exit Sub
+        End If
+        pnlMetas.Visible = False
+        pnlActividades.Visible = False
+        pnlInfoMetas.Visible = False
+        pnlEvidencias.Visible = True
+        pestaña(2)
+    End Sub
+
+#End Region
     Private Sub btnVisualizarHojaVida_Click(sender As Object, e As EventArgs) Handles btnVisualizarHojaVida.Click
         Try
             If Request.QueryString("idMeta") <> String.Empty Then
@@ -255,11 +281,22 @@ Public Class Seguimiento
                                                          txtActividades.Text.Trim, Date.Now.ToString("yyyy-MM-dd"), "A")
             parametrizacion.updateValue_progress(idMeta, txtValorFisico.Text.Trim)
             alerta("Se ha grabado el seguimiento correctamente", "Ya puedes agregar las evidencias", "success")
+            navEvidencias_Click(Nothing, Nothing)
         Catch ex As Exception
             lblError.Text = ex.Message
             lblError.Visible = True
         End Try
     End Sub
+
+    Private Sub btnAtras_Click(sender As Object, e As EventArgs) Handles btnAtras.Click
+        Try
+            navActividades_Click(Nothing, Nothing)
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
+
     Private Sub btnLimpiar_Click(sender As Object, e As EventArgs) Handles btnLimpiar.Click
         Try
             Response.Redirect("Seguimiento.aspx")
@@ -499,7 +536,7 @@ Public Class Seguimiento
                                 pnlMetas.Controls.Add(New LiteralControl("
                                         <div class=""row mb-4"">
                                             <div class=""col-9"">
-                                                <h5>" & row2("name") & " " & row2("id") & "-" & row2("subactivity") & "</h5>
+                                                <h5>" & row2("name") & "-" & row2("subactivity") & "</h5>
                                             </div>   
                                             <div class=""col-2"">
                                                 <a href=""Seguimiento.aspx?idMeta=" & row2("id") & """ class=""btn btn-primary"">Seguimiento</a>                                            
@@ -573,6 +610,21 @@ Public Class Seguimiento
             lblError.Visible = True
         End Try
     End Sub
+
+    Sub pestaña(index As Integer)
+        navActividades.Attributes.Add("class", "")
+        navEvidencias.Attributes.Add("class", "")
+
+        Select Case index
+            Case 1
+                navActividades.Attributes.Add("class", "nav-link active")
+                navEvidencias.Attributes.Add("class", "nav-link")
+            Case 2
+                navEvidencias.Attributes.Add("class", "nav-link active")
+                navActividades.Attributes.Add("class", "nav-link")
+        End Select
+    End Sub
+
     Public Sub alerta(ByVal mensaje As String, ByVal subMensaje As String, ByVal tipo As String, Optional foco As String = "")
         Dim Script As String = "<script type='text/javascript'> swal({title:'" + mensaje.Replace("'", " | ") + "', text:'" + subMensaje.Replace("'", " | ") + "' , type:'" + tipo + "', confirmButtonText:'OK'})"
         If foco.Trim <> "" Then
