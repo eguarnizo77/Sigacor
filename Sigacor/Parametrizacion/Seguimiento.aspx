@@ -291,7 +291,7 @@
                         <div class="col-10">
                             <div class="form-group">
                                 <label>Cargue el archivo</label>
-                                <asp:FileUpload type="FileStream" ID="fuArchivo" runat="server" accept=".pdf, .xlsx, .xls, .docx, .txt" CssClass="btn btn-primary btn-icon-split" />
+                                <asp:FileUpload type="FileStream" AllowMultiple="true" ID="fuArchivo" runat="server" accept=".pdf, .xlsx, .xls, .docx, .txt" CssClass="btn btn-primary btn-icon-split" />
                                 <input type="text" id="txtArchivo" runat="server" class="form-control" style="display: none;" />
                             </div>
                         </div>

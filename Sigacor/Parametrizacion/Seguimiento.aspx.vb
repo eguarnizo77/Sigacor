@@ -332,76 +332,78 @@ Public Class Seguimiento
             End If
 
             If fuArchivo.HasFile Then
+                For Each uploadedFile As HttpPostedFile In fuArchivo.PostedFiles
 
-                If (fuArchivo.PostedFile.ContentLength > 2000000) Then
-                    alerta("El archivo no puede ser mayor a 2 MB", "", "error", "")
-                    Exit Sub
-                End If
+                    If (uploadedFile.ContentLength > 2000000) Then
+                        alerta("El archivo no puede ser mayor a 2 MB", "", "error", "")
+                        Exit Sub
+                    End If
 
-                Dim fileExt As String = System.IO.Path.GetExtension(fuArchivo.PostedFile.FileName)
+                    Dim fileExt As String = System.IO.Path.GetExtension(uploadedFile.FileName)
 
-                If fileExt = ".pdf" Or fileExt = ".xlsx" Or fileExt = ".xls" Or fileExt = ".docx" Or fileExt = ".txt" Or
-                   fileExt = ".PDF" Or fileExt = ".XLSX" Or fileExt = ".XLS" Or fileExt = ".DOCX" Or fileExt = ".TXT" Then
+                    If fileExt = ".pdf" Or fileExt = ".xlsx" Or fileExt = ".xls" Or fileExt = ".docx" Or fileExt = ".txt" Or
+                       fileExt = ".PDF" Or fileExt = ".XLSX" Or fileExt = ".XLS" Or fileExt = ".DOCX" Or fileExt = ".TXT" Then
 
-                    filePat = Path.Combine(Request.PhysicalApplicationPath, "Evidencias\")
-                    pathCorto &= "Evidencias\"
-                    If (Directory.Exists(filePat & idMeta & "-" & Session("pac"))) Then
-                        If (Directory.Exists(filePat & idMeta & "-" & Session("pac") & "\" & "txt")) Then
+                        filePat = Path.Combine(Request.PhysicalApplicationPath, "Evidencias\")
+                        pathCorto &= "Evidencias\"
+                        If (Directory.Exists(filePat & idMeta & "-" & Session("pac"))) Then
+                            If (Directory.Exists(filePat & idMeta & "-" & Session("pac") & "\" & "txt")) Then
+                            Else
+                                Directory.CreateDirectory(Path.Combine(filePat, "txt"))
+                            End If
                         Else
-                            Directory.CreateDirectory(Path.Combine(filePat, "txt"))
+                            Directory.CreateDirectory(Path.Combine(filePat, idMeta & "-" & Session("pac")))
+                            Directory.CreateDirectory(Path.Combine(filePat & idMeta & "-" & Session("pac"), "txt"))
                         End If
+
+                        filePat &= idMeta & "-" & Session("pac") & "\txt\"
+                        pathCorto &= idMeta & "-" & Session("pac") & "\txt\"
+
+                        If (Directory.Exists(filePat & idReport.Text.Trim & "-" & Date.Now.ToString("dd-MM-yyyy"))) Then
+                        Else
+                            Directory.CreateDirectory(Path.Combine(filePat, idReport.Text.Trim & "-" & Date.Now.ToString("dd-MM-yyyy")))
+                        End If
+
+                        filePat &= idReport.Text.Trim & "-" & Date.Now.ToString("dd-MM-yyyy") & "\"
+                        pathCorto &= idReport.Text.Trim & "-" & Date.Now.ToString("dd-MM-yyyy") & "\"
+
+                        fileName = Path.GetFileName(Server.MapPath(uploadedFile.FileName))
+
+                        fuArchivo.PostedFile.SaveAs(filePat & fileName)
+
+                        Dim dataAdjuntos As New DataTable
+                        Dim row As DataRow
+
+                        dataAdjuntos.Columns.Add("nombre")
+                        dataAdjuntos.Columns.Add("ruta")
+                        dataAdjuntos.Columns.Add("")
+
+
+                        If Session("dataAdjuntos") IsNot Nothing Then dataAdjuntos = Session("dataAdjuntos")
+
+                        row = dataAdjuntos.NewRow()
+                        row("nombre") = fileName
+                        row("ruta") = pathCorto & fileName
+                        dataAdjuntos.Rows.Add(row)
+
+                        Session("dataAdjuntos") = dataAdjuntos
+                        tblArchivos.DataSource = dataAdjuntos
+                        tblArchivos.DataBind()
+
+                        arraySeguimiento = "["
+                        For Each row2 As DataRow In dataAdjuntos.Rows
+                            arraySeguimiento &= row("ruta") & ", "
+                        Next
+                        arraySeguimiento = arraySeguimiento.Substring(0, arraySeguimiento.Length - 2)
+                        arraySeguimiento &= "]"
+
+                        parametrizacion.updateAdjuntosReport("array_archivos", arraySeguimiento, idReport.Text.Trim)
+                        alerta("Se ha cargado el archivo correctamente", "", "success", "")
                     Else
-                        Directory.CreateDirectory(Path.Combine(filePat, idMeta & "-" & Session("pac")))
-                        Directory.CreateDirectory(Path.Combine(filePat & idMeta & "-" & Session("pac"), "txt"))
+                        alerta("Archivo no Permitido", "", "warning", "")
+                        Exit Sub
                     End If
-
-                    filePat &= idMeta & "-" & Session("pac") & "\txt\"
-                    pathCorto &= idMeta & "-" & Session("pac") & "\txt\"
-
-                    If (Directory.Exists(filePat & idReport.Text.Trim & "-" & Date.Now.ToString("dd-MM-yyyy"))) Then
-                    Else
-                        Directory.CreateDirectory(Path.Combine(filePat, idReport.Text.Trim & "-" & Date.Now.ToString("dd-MM-yyyy")))
-                    End If
-
-                    filePat &= idReport.Text.Trim & "-" & Date.Now.ToString("dd-MM-yyyy") & "\"
-                    pathCorto &= idReport.Text.Trim & "-" & Date.Now.ToString("dd-MM-yyyy") & "\"
-
-                    fileName = Path.GetFileName(Server.MapPath(fuArchivo.FileName))
-
-                    fuArchivo.PostedFile.SaveAs(filePat & fileName)
-
-                    Dim dataAdjuntos As New DataTable
-                    Dim row As DataRow
-
-                    dataAdjuntos.Columns.Add("nombre")
-                    dataAdjuntos.Columns.Add("ruta")
-                    dataAdjuntos.Columns.Add("")
-
-
-                    If Session("dataAdjuntos") IsNot Nothing Then dataAdjuntos = Session("dataAdjuntos")
-
-                    row = dataAdjuntos.NewRow()
-                    row("nombre") = fileName
-                    row("ruta") = pathCorto & fileName
-                    dataAdjuntos.Rows.Add(row)
-
-                    Session("dataAdjuntos") = dataAdjuntos
-                    tblArchivos.DataSource = dataAdjuntos
-                    tblArchivos.DataBind()
-
-                    arraySeguimiento = "["
-                    For Each row2 As DataRow In dataAdjuntos.Rows
-                        arraySeguimiento &= row("ruta") & ", "
-                    Next
-                    arraySeguimiento = arraySeguimiento.Substring(0, arraySeguimiento.Length - 2)
-                    arraySeguimiento &= "]"
-
-                    parametrizacion.updateAdjuntosReport("array_archivos", arraySeguimiento, idReport.Text.Trim)
-                    alerta("Se ha cargado el archivo correctamente", "", "success", "")
-                Else
-                    alerta("Archivo no Permitido", "", "warning", "")
-                    Exit Sub
-                End If
+                Next
             Else
                 alerta("Advertencia", "No ha seleccionado ningún archivo", "error", "")
             End If
@@ -428,73 +430,75 @@ Public Class Seguimiento
             End If
 
             If fuImagenes.HasFile Then
+                For Each uploadedFile As HttpPostedFile In fuArchivo.PostedFiles
 
-                If (fuImagenes.PostedFile.ContentLength > 2000000) Then
-                    alerta("El archivo no puede ser mayor a 2 MB", "", "error", "")
-                    Exit Sub
-                End If
+                    If (uploadedFile.ContentLength > 2000000) Then
+                        alerta("El archivo no puede ser mayor a 2 MB", "", "error", "")
+                        Exit Sub
+                    End If
 
-                Dim fileExt As String = System.IO.Path.GetExtension(fuImagenes.PostedFile.FileName)
+                    Dim fileExt As String = System.IO.Path.GetExtension(uploadedFile.FileName)
 
-                If fileExt = ".img" Or fileExt = ".png" Or fileExt = ".jpg" Or fileExt = ".jpge" Or fileExt = ".svg" Or
-                   fileExt = ".IMG" Or fileExt = ".PNG" Or fileExt = ".JPG" Or fileExt = ".JPGE" Or fileExt = ".SVG" Then
-                    filePat = Path.Combine(Request.PhysicalApplicationPath, "Evidencias\")
-                    pathCorto &= "Evidencias\"
-                    If (Directory.Exists(filePat & idMeta & "-" & Session("pac"))) Then
-                        If (Directory.Exists(filePat & idMeta & "-" & Session("pac") & "\" & "img")) Then
+                    If fileExt = ".img" Or fileExt = ".png" Or fileExt = ".jpg" Or fileExt = ".jpge" Or fileExt = ".svg" Or
+                       fileExt = ".IMG" Or fileExt = ".PNG" Or fileExt = ".JPG" Or fileExt = ".JPGE" Or fileExt = ".SVG" Then
+                        filePat = Path.Combine(Request.PhysicalApplicationPath, "Evidencias\")
+                        pathCorto &= "Evidencias\"
+                        If (Directory.Exists(filePat & idMeta & "-" & Session("pac"))) Then
+                            If (Directory.Exists(filePat & idMeta & "-" & Session("pac") & "\" & "img")) Then
+                            Else
+                                Directory.CreateDirectory(Path.Combine(filePat & idMeta & "-" & Session("pac"), "img"))
+                            End If
                         Else
+                            Directory.CreateDirectory(Path.Combine(filePat, idMeta & "-" & Session("pac")))
                             Directory.CreateDirectory(Path.Combine(filePat & idMeta & "-" & Session("pac"), "img"))
                         End If
+
+                        filePat &= idMeta & "-" & Session("pac") & "\img\"
+                        pathCorto &= idMeta & "-" & Session("pac") & "\img\"
+
+                        If (Directory.Exists(filePat & idReport.Text.Trim & "-" & Date.Now.ToString("dd-MM-yyyy"))) Then
+                        Else
+                            Directory.CreateDirectory(Path.Combine(filePat, idReport.Text.Trim & "-" & Date.Now.ToString("dd-MM-yyyy")))
+                        End If
+
+
+                        fileName = Path.GetFileName(Server.MapPath(uploadedFile.FileName))
+
+                        fuImagenes.PostedFile.SaveAs(filePat & fileName)
+
+                        Dim dataImagenes As New DataTable
+                        Dim row As DataRow
+
+                        dataImagenes.Columns.Add("nombre")
+                        dataImagenes.Columns.Add("ruta")
+                        dataImagenes.Columns.Add("")
+
+
+                        If Session("dataImagenes") IsNot Nothing Then dataImagenes = Session("dataImagenes")
+
+                        row = dataImagenes.NewRow()
+                        row("nombre") = fileName
+                        row("ruta") = pathCorto & fileName
+                        dataImagenes.Rows.Add(row)
+
+                        Session("dataImagenes") = dataImagenes
+                        tblImagenes.DataSource = dataImagenes
+                        tblImagenes.DataBind()
+
+                        arraySeguimiento = "["
+                        For Each row2 As DataRow In dataImagenes.Rows
+                            arraySeguimiento &= row("ruta") & ", "
+                        Next
+                        arraySeguimiento = arraySeguimiento.Substring(0, arraySeguimiento.Length - 2)
+                        arraySeguimiento &= "]"
+
+                        parametrizacion.updateAdjuntosReport("array_imagenes", arraySeguimiento, idReport.Text.Trim)
+                        alerta("Se ha cargado la imagenes correctamente", "", "success", "")
                     Else
-                        Directory.CreateDirectory(Path.Combine(filePat, idMeta & "-" & Session("pac")))
-                        Directory.CreateDirectory(Path.Combine(filePat & idMeta & "-" & Session("pac"), "img"))
+                        alerta("Archivo no Permitido", "", "warning", "")
+                        Exit Sub
                     End If
-
-                    filePat &= idMeta & "-" & Session("pac") & "\img\"
-                    pathCorto &= idMeta & "-" & Session("pac") & "\img\"
-
-                    If (Directory.Exists(filePat & idReport.Text.Trim & "-" & Date.Now.ToString("dd-MM-yyyy"))) Then
-                    Else
-                        Directory.CreateDirectory(Path.Combine(filePat, idReport.Text.Trim & "-" & Date.Now.ToString("dd-MM-yyyy")))
-                    End If
-
-
-                    fileName = Path.GetFileName(Server.MapPath(fuImagenes.FileName))
-
-                    fuImagenes.PostedFile.SaveAs(filePat & fileName)
-
-                    Dim dataImagenes As New DataTable
-                    Dim row As DataRow
-
-                    dataImagenes.Columns.Add("nombre")
-                    dataImagenes.Columns.Add("ruta")
-                    dataImagenes.Columns.Add("")
-
-
-                    If Session("dataImagenes") IsNot Nothing Then dataImagenes = Session("dataImagenes")
-
-                    row = dataImagenes.NewRow()
-                    row("nombre") = fileName
-                    row("ruta") = pathCorto & fileName
-                    dataImagenes.Rows.Add(row)
-
-                    Session("dataImagenes") = dataImagenes
-                    tblImagenes.DataSource = dataImagenes
-                    tblImagenes.DataBind()
-
-                    arraySeguimiento = "["
-                    For Each row2 As DataRow In dataImagenes.Rows
-                        arraySeguimiento &= row("ruta") & ", "
-                    Next
-                    arraySeguimiento = arraySeguimiento.Substring(0, arraySeguimiento.Length - 2)
-                    arraySeguimiento &= "]"
-
-                    parametrizacion.updateAdjuntosReport("array_imagenes", arraySeguimiento, idReport.Text.Trim)
-                    alerta("Se ha cargado la imagenes correctamente", "", "success", "")
-                Else
-                    alerta("Archivo no Permitido", "", "warning", "")
-                    Exit Sub
-                End If
+                Next
             Else
                 alerta("Advertencia", "No ha seleccionado ningún archivo", "error", "")
             End If
