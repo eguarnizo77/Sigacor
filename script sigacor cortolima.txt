@@ -9,6 +9,7 @@ CREATE TABLE [profiles] (
 GO
 
 insert into profiles(user_id, rol_id, address, movil, state) values ('katherinne-silva','ADM', 'katherinne.silva@cortolima.gov.co', '3107712363',	'A');
+insert into profiles(user_id, rol_id, address, movil, state) values ('katherinne-silva1','ADM', 'katherinne.silva@cortolima.gov.co', '3107712363',	'A');
 
 CREATE TABLE [menu] (
   [name] nvarchar(255),

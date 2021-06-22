@@ -141,9 +141,8 @@
         Try
             If e.Row.RowType = DataControlRowType.DataRow Then
                 e.Row.Cells(0).Visible = False
-                e.Row.Cells(3).Visible = False
-                e.Row.Cells(5).Visible = False
-                e.Row.Cells(7).Visible = False
+                e.Row.Cells(4).Visible = False
+                e.Row.Cells(6).Visible = False
 
                 Dim linkBtnEditar, linkBtnEliminar, linkBtnConfirmar As New LinkButton
                 linkBtnEditar = e.Row.FindControl("lnkEditPlanAcc")
@@ -151,16 +150,15 @@
                 linkBtnConfirmar = e.Row.FindControl("lnkConEditPlanAcc")
 
                 linkBtnEditar.CommandArgument = e.Row.Cells(0).Text.Trim
-                linkBtnEliminar.CommandArgument = e.Row.Cells(0).Text.Trim
+                'linkBtnEliminar.CommandArgument = e.Row.Cells(0).Text.Trim
 
                 linkBtnConfirmar.Visible = False
 
             End If
             If e.Row.RowType = DataControlRowType.Header Then
                 e.Row.Cells(0).Visible = False
-                e.Row.Cells(3).Visible = False
-                e.Row.Cells(5).Visible = False
-                e.Row.Cells(7).Visible = False
+                e.Row.Cells(4).Visible = False
+                e.Row.Cells(6).Visible = False                
             End If
         Catch ex As Exception
             lblError.Text = ex.Message
@@ -172,24 +170,24 @@
         Try
             If e.Row.RowType = DataControlRowType.DataRow Then
                 e.Row.Cells(0).Visible = False
-                e.Row.Cells(2).Visible = False
-                e.Row.Cells(4).Visible = False
+                e.Row.Cells(3).Visible = False
+                'e.Row.Cells(4).Visible = False
 
                 Dim linkBtnEditar, linkBtnEliminar, linkBtnConfirmar As New LinkButton
                 linkBtnEditar = e.Row.FindControl("lnkEditNiv")
-                linkBtnEliminar = e.Row.FindControl("lnkEliNiv")
+                'linkBtnEliminar = e.Row.FindControl("lnkEliNiv")
                 linkBtnConfirmar = e.Row.FindControl("lnkConEdit")
 
                 linkBtnEditar.CommandArgument = e.Row.Cells(0).Text.Trim
-                linkBtnEliminar.CommandArgument = e.Row.Cells(0).Text.Trim
+                'linkBtnEliminar.CommandArgument = e.Row.Cells(0).Text.Trim
 
                 linkBtnConfirmar.Visible = False
 
             End If
             If e.Row.RowType = DataControlRowType.Header Then
                 e.Row.Cells(0).Visible = False
-                e.Row.Cells(2).Visible = False
-                e.Row.Cells(4).Visible = False
+                e.Row.Cells(3).Visible = False
+                'e.Row.Cells(4).Visible = False
             End If
         Catch ex As Exception
             lblError.Text = ex.Message
@@ -224,32 +222,32 @@
         Try
 
             Dim linkBtnConfirmar, linkBtnEditar, linkBtnEliminar As New LinkButton
-            Dim codigo, nombre As TextBox
+            Dim nombre As TextBox
 
             If e.CommandName = "Editar" Then
                 For Each row As GridViewRow In tblNiveles.Rows
 
                     linkBtnConfirmar = tblNiveles.Rows(row.RowIndex).FindControl("lnkConEdit")
                     linkBtnEditar = tblNiveles.Rows(row.RowIndex).FindControl("lnkEditNiv")
-                    linkBtnEliminar = tblNiveles.Rows(row.RowIndex).FindControl("lnkEliNiv")
+                    'linkBtnEliminar = tblNiveles.Rows(row.RowIndex).FindControl("lnkEliNiv")
 
-                    codigo = tblNiveles.Rows(row.RowIndex).FindControl("txtCodigo")
+                    'codigo = tblNiveles.Rows(row.RowIndex).FindControl("txtCodigo")
                     nombre = tblNiveles.Rows(row.RowIndex).FindControl("txtNombre")
 
                     If e.CommandArgument = row.Cells(0).Text Then
 
                         linkBtnEditar.Visible = False
                         linkBtnConfirmar.Visible = True
-                        linkBtnEliminar.Visible = False
+                        'linkBtnEliminar.Visible = False
 
-                        codigo.Text = row.Cells(1).Text.Trim
-                        nombre.Text = row.Cells(3).Text.Trim
+                        'codigo.Text = row.Cells(1).Text.Trim
+                        nombre.Text = HttpUtility.HtmlDecode(row.Cells(2).Text.Trim)
 
-                        row.Cells(1).Visible = False
-                        row.Cells(2).Visible = True
+                        row.Cells(2).Visible = False
+                        row.Cells(3).Visible = True
 
-                        row.Cells(3).Visible = False
-                        row.Cells(4).Visible = True
+                        'row.Cells(3).Visible = False
+                        'row.Cells(4).Visible = True
 
 
                     Else
@@ -261,34 +259,35 @@
             ElseIf e.CommandName = "Confirmar" Then
 
                 For Each row As GridViewRow In tblNiveles.Rows
-                    codigo = tblNiveles.Rows(row.RowIndex).FindControl("txtCodigo")
+                    'codigo = tblNiveles.Rows(row.RowIndex).FindControl("txtCodigo")
                     nombre = tblNiveles.Rows(row.RowIndex).FindControl("txtNombre")
 
-                    If row.Cells(2).Visible = True Then
-                        If codigo.Text = String.Empty Then
-                            alerta("Advertencia", "Ingrese el código del nivel", "info")
-                            Exit Sub
-                        End If
+                    If row.Cells(3).Visible = True Then
+                        'If codigo.Text = String.Empty Then
+                        '    alerta("Advertencia", "Ingrese el código del nivel", "info")
+                        '    Exit Sub
+                        'End If
                         If nombre.Text = String.Empty Then
                             alerta("Advertencia", "Ingrese el nombre del nivel", "info")
                             Exit Sub
                         End If
-                        Fila = Nothing
-                        Fila = parametrizacion.selectLevelsFila(lblPac.Text.Trim, codigo.Text.Trim, nombre.Text.Trim)
-                        If Fila Is Nothing Then
+                        parametrizacion.updateLevels(row.Cells(0).Text.Trim, nombre.Text.Trim, row.Cells(1).Text.Trim, "A")
+                        'Fila = Nothing
+                        'Fila = parametrizacion.selectLevelsFila(lblPac.Text.Trim, row.Cells(1).Text.Trim, nombre.Text.Trim)
+                        'If Fila Is Nothing Then
 
-                            If row.Cells(1).Text.Trim <> codigo.Text.Trim Then
-                                Fila = Nothing
-                                Fila = parametrizacion.selectLevelsFila(lblPac.Text.Trim, codigo.Text.Trim)
-                                If Fila IsNot Nothing Then
-                                    alerta("Advertencia", "El código del nivel, ya existe", "info")
-                                    Exit Sub
-                                End If
-                            Else
-                                parametrizacion.updateLevels(row.Cells(0).Text.Trim, nombre.Text.Trim, codigo.Text.Trim, "A")
-                            End If
+                        '    If row.Cells(1).Text.Trim <> codigo.Text.Trim Then
+                        '        Fila = Nothing
+                        '        Fila = parametrizacion.selectLevelsFila(lblPac.Text.Trim, codigo.Text.Trim)
+                        '        If Fila IsNot Nothing Then
+                        '            alerta("Advertencia", "El código del nivel, ya existe", "info")
+                        '            Exit Sub
+                        '        End If
+                        '    Else
 
-                        End If
+                        '    End If
+
+                        'End If
                     End If
                 Next
 
@@ -310,16 +309,17 @@
         Try
 
             Dim linkBtnConfirmar, linkBtnEditar, linkBtnEliminar As New LinkButton
-            Dim jerarquia, nombre, peso As TextBox
+            'Dim jerarquia, nombre, peso As TextBox
+            Dim nombre, peso As TextBox
 
             If e.CommandName = "Editar" Then
                 For Each row As GridViewRow In tblPlanAccion.Rows
 
                     linkBtnConfirmar = tblPlanAccion.Rows(row.RowIndex).FindControl("lnkConEditPlanAcc")
                     linkBtnEditar = tblPlanAccion.Rows(row.RowIndex).FindControl("lnkEditPlanAcc")
-                    linkBtnEliminar = tblPlanAccion.Rows(row.RowIndex).FindControl("lnkEliPlanAcc")
+                    'linkBtnEliminar = tblPlanAccion.Rows(row.RowIndex).FindControl("lnkEliPlanAcc")
 
-                    jerarquia = tblPlanAccion.Rows(row.RowIndex).FindControl("txtJerarquia")
+                    'jerarquia = tblPlanAccion.Rows(row.RowIndex).FindControl("txtJerarquia")
                     nombre = tblPlanAccion.Rows(row.RowIndex).FindControl("txtNombrePlanAcc")
                     peso = tblPlanAccion.Rows(row.RowIndex).FindControl("txtPeso")
 
@@ -327,38 +327,35 @@
 
                         linkBtnEditar.Visible = False
                         linkBtnConfirmar.Visible = True
-                        linkBtnEliminar.Visible = False
+                        'linkBtnEliminar.Visible = False
 
-                        jerarquia.Text = row.Cells(2).Text.Trim
-                        nombre.Text = row.Cells(4).Text.Trim
-                        peso.Text = row.Cells(6).Text.Trim
+                        'jerarquia.Text = row.Cells(2).Text.Trim
+                        nombre.Text = HttpUtility.HtmlDecode(row.Cells(3).Text.Trim)
+                        peso.Text = row.Cells(5).Text.Trim
 
-                        row.Cells(2).Visible = False
-                        row.Cells(3).Visible = True
+                        row.Cells(3).Visible = False
+                        row.Cells(4).Visible = True
 
-                        row.Cells(4).Visible = False
-                        row.Cells(5).Visible = True
-
-                        row.Cells(6).Visible = False
-                        row.Cells(7).Visible = True
+                        row.Cells(5).Visible = False
+                        row.Cells(6).Visible = True
                     Else
                         linkBtnEditar.Visible = False
-                        linkBtnEliminar.Visible = False
+                        'linkBtnEliminar.Visible = False
                     End If
                 Next
 
             ElseIf e.CommandName = "Confirmar" Then
 
                 For Each row As GridViewRow In tblPlanAccion.Rows
-                    jerarquia = tblPlanAccion.Rows(row.RowIndex).FindControl("txtJerarquia")
+                    'jerarquia = tblPlanAccion.Rows(row.RowIndex).FindControl("txtJerarquia")
                     nombre = tblPlanAccion.Rows(row.RowIndex).FindControl("txtNombrePlanAcc")
                     peso = tblPlanAccion.Rows(row.RowIndex).FindControl("txtPeso")
 
-                    If row.Cells(3).Visible = True Then
-                        If jerarquia.Text = String.Empty Then
-                            alerta("Advertencia", "Ingrese el código de la jerarquia", "info")
-                            Exit Sub
-                        End If
+                    If row.Cells(4).Visible = True Then
+                        'If jerarquia.Text = String.Empty Then
+                        '    alerta("Advertencia", "Ingrese el código de la jerarquia", "info")
+                        '    Exit Sub
+                        'End If
                         If nombre.Text = String.Empty Then
                             alerta("Advertencia", "Ingrese el nombre del plan de acción cuatrienal", "info")
                             Exit Sub
@@ -367,7 +364,7 @@
                             alerta("Advertencia", "Ingrese el peso del plan de acción cuatrienal", "info")
                             Exit Sub
                         End If
-                        parametrizacion.updateContents(row.Cells(0).Text.Trim, jerarquia.Text.Trim, nombre.Text.Trim, peso.Text.Trim)
+                        parametrizacion.updateContents(row.Cells(0).Text.Trim, row.Cells(2).Text.Trim, nombre.Text.Trim, peso.Text.Trim)
                         Exit For
                     End If
                 Next

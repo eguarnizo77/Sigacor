@@ -115,16 +115,17 @@ Public Class clParametrizacion
         Return Data.Execute(QRY)
     End Function
 
-    Public Function selectLinea(ByVal pac_id As String) As DataTable
+    Public Function selectNiveles(ByVal pac_id As String, Optional ByVal sublevel As String = "") As DataTable
 
-        QRY = "select * from contents where pac_id = " & pac_id & " and level_id = 1"
+        QRY = "select c.code, c.name, l.name from contents c join levels l on c.pac_id = l.pac_id and c.level_id = l.hierarchy where 
+               c.state = 'A' and  c.pac_id = " & pac_id & " and c.sublevel = '" & sublevel & "'"
 
         Return Data.OpenData(QRY)
     End Function
 
-    Public Function selectLineaAgrupado(ByVal pac_id As String, ByVal subactivity As String) As DataTable
+    Public Function selectGoalsXsubactivity(ByVal pac_id As String, ByVal subactivity As String) As DataTable
 
-        QRY = "select * from goals where subactivity like '" & subactivity & "%' and pac_id = " & pac_id
+        QRY = "select id, CONCAT(subactivity, ' - ', name) name from goals where state = 'A' and subactivity like '" & subactivity & "%' and pac_id = " & pac_id
 
         Return Data.OpenData(QRY)
     End Function

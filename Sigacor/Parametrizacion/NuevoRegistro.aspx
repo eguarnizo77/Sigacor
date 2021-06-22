@@ -91,11 +91,11 @@
                                 <Columns>
                                     <asp:BoundField DataField="id" />
                                     <asp:BoundField DataField="hierarchy" HeaderText="Código" />
-                                    <asp:TemplateField HeaderText="Código">
+                                    <%--<asp:TemplateField HeaderText="Código">
                                         <ItemTemplate>
                                             <asp:TextBox TextMode="Number" ID="txtCodigo" class="form-control" runat="server"></asp:TextBox>
                                         </ItemTemplate>
-                                    </asp:TemplateField>
+                                    </asp:TemplateField>--%>
                                     <asp:BoundField DataField="name" HeaderText="Nombre" />
                                     <asp:TemplateField HeaderText="Nombre">
                                         <ItemTemplate>
@@ -114,11 +114,11 @@
                                                 Style="display: inline-grid" title="Confirmar" class="btn btn-success btn-circle">                                            
                                             <i class="fas fa-check"></i>                                   
                                             </asp:LinkButton>
-                                            <asp:LinkButton ID="lnkEliNiv" runat="server" data-placement="top"
+                                            <%--<asp:LinkButton ID="lnkEliNiv" runat="server" data-placement="top"
                                                 data-toggle="tooltip" Height="30px" Width="30px" CommandName="Eliminar"
                                                 Style="display: inline-grid" title="Eliminar niveles" class="btn btn-success btn-circle">                                            
                                             <i class="fas fa-backspace"></i>
-                                            </asp:LinkButton>
+                                            </asp:LinkButton>--%>
                                         </ItemTemplate>
                                         <ItemStyle Width="20%" VerticalAlign="Middle" HorizontalAlign="Center" />
                                     </asp:TemplateField>
@@ -182,11 +182,11 @@
                                     <asp:BoundField DataField="id" HeaderText="id" />
                                     <asp:BoundField DataField="level_id" HeaderText="Nivel" />
                                     <asp:BoundField DataField="code" HeaderText="Jerarquia" />
-                                    <asp:TemplateField HeaderText="Jerarquia">
+                                   <%-- <asp:TemplateField HeaderText="Jerarquia">
                                         <ItemTemplate>
                                             <asp:TextBox ID="txtJerarquia" class="form-control" runat="server"></asp:TextBox>
                                         </ItemTemplate>
-                                    </asp:TemplateField>
+                                    </asp:TemplateField>--%>
                                     <asp:BoundField DataField="name" HeaderText="Nombre" />
                                     <asp:TemplateField HeaderText="Nombre">
                                         <ItemTemplate>
@@ -211,11 +211,11 @@
                                                 Style="display: inline-grid" title="Confirmar" class="btn btn-success btn-circle">                                            
                                             <i class="fas fa-check"></i>                                   
                                             </asp:LinkButton>
-                                            <asp:LinkButton ID="lnkEliPlanAcc" runat="server" data-placement="top"
+                                            <%--<asp:LinkButton ID="lnkEliPlanAcc" runat="server" data-placement="top"
                                                 data-toggle="tooltip" Height="30px" Width="30px" CommandName="Eliminar"
                                                 Style="display: inline-grid" title="Eliminar plan de acción" class="btn btn-success btn-circle">                                            
                                             <i class="fas fa-backspace"></i>
-                                            </asp:LinkButton>
+                                            </asp:LinkButton>--%>
                                         </ItemTemplate>
                                         <ItemStyle Width="20%" VerticalAlign="Middle" HorizontalAlign="Center" />
                                     </asp:TemplateField>

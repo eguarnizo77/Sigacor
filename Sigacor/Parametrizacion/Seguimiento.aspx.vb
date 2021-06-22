@@ -12,14 +12,19 @@ Public Class Seguimiento
             If Request.QueryString("idMeta") <> String.Empty Then
                 cargarMeta(Request.QueryString("idMeta"))
             End If
-            cargarMetaAgrupado()
+            'cargarMetaAgrupado()
             If Not IsPostBack Then
+                pnlNiv2.Visible = False
+                pnlNiv3.Visible = False
+                pnlNiv4.Visible = False
+                cargarLineas()
+
                 Session("dataImagenes") = Nothing
                 Session("dataAdjuntos") = Nothing
 
                 lblError.Visible = False
 
-                navActividades_Click(Nothing, Nothing)
+                navMetas_Click(Nothing, Nothing)
 
                 DataT = Nothing
                 DataT = fun.periodicity()
@@ -35,6 +40,96 @@ Public Class Seguimiento
                 lblYearActual.Text = "Año actual(" & Date.Now.Year & ")"
             End If
 
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
+
+#End Region
+
+#Region "SelectedIndexChanged"
+    Private Sub cmbLineas_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbLineas.SelectedIndexChanged
+        Try
+            DataT = Nothing
+            If cmbLineas.SelectedIndex = 0 Then
+                cmbNiv2.Items.Clear()
+                pnlNiv2.Visible = False
+            Else
+                DataT = parametrizacion.selectNiveles(pac.Text.Trim, cmbLineas.SelectedValue)
+                If DataT.Rows.Count > 0 Then
+                    cmbNiv2.Items.Clear()
+                    cmbNiv2.DataTextField = "name"
+                    cmbNiv2.DataValueField = "code"
+                    cmbNiv2.DataSource = DataT
+                    cmbNiv2.DataBind()
+                    cmbNiv2.Items.Insert(0, New ListItem("---Seleccione---", ""))
+                    lblNiv2.Text = DataT(0)(2)
+                    pnlNiv2.Visible = True
+                Else
+                    cmbNiv2.Items.Clear()
+                    pnlNiv2.Visible = False
+                    alerta("Advertencia", "No se han encontrado programas", "info")
+                End If
+            End If
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
+
+    Private Sub cmbNiv2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbNiv2.SelectedIndexChanged
+        Try
+            DataT = Nothing
+            If cmbNiv2.SelectedIndex = 0 Then
+                cmbNiv3.Items.Clear()
+                pnlNiv3.Visible = False
+            Else
+                DataT = parametrizacion.selectNiveles(pac.Text.Trim, cmbNiv2.SelectedValue)
+                If DataT.Rows.Count > 0 Then
+                    cmbNiv3.Items.Clear()
+                    cmbNiv3.DataTextField = "name"
+                    cmbNiv3.DataValueField = "code"
+                    cmbNiv3.DataSource = DataT
+                    cmbNiv3.DataBind()
+                    cmbNiv3.Items.Insert(0, New ListItem("---Seleccione---", ""))
+                    lblNiv3.Text = DataT(0)(2)
+                    pnlNiv3.Visible = True
+                Else
+                    cmbNiv3.Items.Clear()
+                    pnlNiv3.Visible = False
+                    alerta("Advertencia", "No se han encontrado proyectos", "info")
+                End If
+            End If
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
+
+    Private Sub cmbNiv3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbNiv3.SelectedIndexChanged
+        Try
+            DataT = Nothing
+            If cmbNiv3.SelectedIndex = 0 Then
+                cmbNiv4.Items.Clear()
+                pnlNiv4.Visible = False
+            Else
+                DataT = parametrizacion.selectNiveles(pac.Text.Trim, cmbNiv3.SelectedValue)
+                If DataT.Rows.Count > 0 Then
+                    cmbNiv4.Items.Clear()
+                    cmbNiv4.DataTextField = "name"
+                    cmbNiv4.DataValueField = "code"
+                    cmbNiv4.DataSource = DataT
+                    cmbNiv4.DataBind()
+                    cmbNiv4.Items.Insert(0, New ListItem("---Seleccione---", ""))
+                    lblNiv4.Text = DataT(0)(2)
+                    pnlNiv4.Visible = True
+                Else
+                    cmbNiv4.Items.Clear()
+                    pnlNiv4.Visible = False
+                    alerta("Advertencia", "No se han encontrado actividades", "info")
+                End If
+            End If
         Catch ex As Exception
             lblError.Text = ex.Message
             lblError.Visible = True
@@ -88,6 +183,23 @@ Public Class Seguimiento
                 linkBtn.CommandArgument = e.Row.Cells(0).Text.Trim
             End If
 
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
+
+    Private Sub tblMetas_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles tblMetas.RowDataBound
+        Try
+            If e.Row.RowType = DataControlRowType.DataRow Then
+                Dim linkBtn As New LinkButton
+                linkBtn = e.Row.FindControl("lnkSeleccionar")
+                linkBtn.CommandArgument = e.Row.Cells(0).Text.Trim
+                e.Row.Cells(0).Visible = False
+            End If
+            If e.Row.RowType = DataControlRowType.Header Then
+                e.Row.Cells(0).Visible = False
+            End If
         Catch ex As Exception
             lblError.Text = ex.Message
             lblError.Visible = True
@@ -192,17 +304,36 @@ Public Class Seguimiento
         End Try
     End Sub
 
+    Private Sub tblMetas_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles tblMetas.RowCommand
+        meta.Text = e.CommandArgument.trim
+        cargarMeta(e.CommandArgument.trim)
+        navActividades_Click(Nothing, Nothing)
+    End Sub
+
 #End Region
 
 #Region "Click"
 
 #Region "Pestaña"
-    Private Sub navActividades_Click(sender As Object, e As EventArgs) Handles navActividades.Click
+
+    Private Sub navMetas_Click(sender As Object, e As EventArgs) Handles navMetas.Click
         pnlMetas.Visible = True
+        pnlActividades.Visible = False
+        pnlInfoMetas.Visible = False
+        pnlEvidencias.Visible = False
+        pestaña(1)
+    End Sub
+    Private Sub navActividades_Click(sender As Object, e As EventArgs) Handles navActividades.Click
+        If txtNombreMeta.Text = String.Empty Then
+            alerta("Advertencia", "Debe seleccionar una meta", "info")
+            navMetas_Click(Nothing, Nothing)
+            Exit Sub
+        End If
+        pnlMetas.Visible = False
         pnlActividades.Visible = True
         pnlInfoMetas.Visible = True
         pnlEvidencias.Visible = False
-        pestaña(1)
+        pestaña(2)
     End Sub
 
     Private Sub navEvidencias_Click(sender As Object, e As EventArgs) Handles navEvidencias.Click
@@ -215,10 +346,49 @@ Public Class Seguimiento
         pnlActividades.Visible = False
         pnlInfoMetas.Visible = False
         pnlEvidencias.Visible = True
-        pestaña(2)
+        pestaña(3)
     End Sub
 
 #End Region
+
+    Private Sub btnConsultar_Click(sender As Object, e As EventArgs) Handles btnConsultar.Click
+        Try
+            DataT = Nothing
+            Dim code As String
+            If cmbLineas.SelectedIndex > 0 Then
+                If cmbNiv2.SelectedIndex > 0 Then
+                    If cmbNiv3.SelectedIndex > 0 Then
+                        If cmbNiv4.SelectedIndex > 0 Then
+                            code = cmbNiv4.SelectedValue
+                        Else
+                            code = cmbNiv3.SelectedValue
+                        End If
+                    Else
+                        code = cmbNiv2.SelectedValue
+                    End If
+                Else
+                    code = cmbLineas.SelectedValue
+                End If
+            Else
+                code = String.Empty
+            End If
+
+            DataT = parametrizacion.selectGoalsXsubactivity(pac.Text.Trim, code)
+            If DataT.Rows.Count > 0 Then
+                tblMetas.DataSource = DataT
+                tblMetas.DataBind()
+
+            Else
+                alerta("No se encontraron metas", "", "info")
+                tblMetas.DataSource = Nothing
+                tblMetas.DataBind()
+            End If
+        Catch ex As Exception
+            lblError.Text = ex.Message
+            lblError.Visible = True
+        End Try
+    End Sub
+
     Private Sub btnVisualizarHojaVida_Click(sender As Object, e As EventArgs) Handles btnVisualizarHojaVida.Click
         Try
             If Request.QueryString("idMeta") <> String.Empty Then
@@ -254,11 +424,9 @@ Public Class Seguimiento
                 alerta("Advertencia", "Información antigua, limpie el formulario", "info", "ontenedor2_btnLimpiar")
                 Exit Sub
             End If
-            If Request.QueryString("idMeta") = String.Empty Then
+            If meta.Text = String.Empty Then
                 alerta("Advertencia", "Seleccione la meta para continuar el proceso", "info")
                 Exit Sub
-            Else
-                idMeta = Request.QueryString("idMeta")
             End If
             If txtYearActual.Text = String.Empty Then
                 alerta("Advertencia", "Ingrese el valor del año actual", "info", "contenedor2_txtYearActual")
@@ -277,9 +445,9 @@ Public Class Seguimiento
                 Exit Sub
             End If
 
-            idReport.Text = parametrizacion.insertReport(idMeta, txtYearActual.Text.Trim, txtValorFisico.Text.Trim,
+            idReport.Text = parametrizacion.insertReport(meta.Text.Trim, txtYearActual.Text.Trim, txtValorFisico.Text.Trim,
                                                          txtActividades.Text.Trim, Date.Now.ToString("yyyy-MM-dd"), "A")
-            parametrizacion.updateValue_progress(idMeta, txtValorFisico.Text.Trim)
+            parametrizacion.updateValue_progress(meta.Text.Trim, txtValorFisico.Text.Trim)
             alerta("Se ha grabado el seguimiento correctamente", "Ya puedes agregar las evidencias", "success")
             navEvidencias_Click(Nothing, Nothing)
         Catch ex As Exception
@@ -288,26 +456,9 @@ Public Class Seguimiento
         End Try
     End Sub
 
-    Private Sub btnAtras_Click(sender As Object, e As EventArgs) Handles btnAtras.Click
-        Try
-            navActividades_Click(Nothing, Nothing)
-        Catch ex As Exception
-            lblError.Text = ex.Message
-            lblError.Visible = True
-        End Try
-    End Sub
-
-    Private Sub btnLimpiar_Click(sender As Object, e As EventArgs) Handles btnLimpiar.Click
+    Private Sub btnFinalizar_Click(sender As Object, e As EventArgs) Handles btnFinalizar.Click
         Try
             Response.Redirect("Seguimiento.aspx")
-        Catch ex As Exception
-            lblError.Text = ex.Message
-            lblError.Visible = True
-        End Try
-    End Sub
-    Private Sub btnCancelar_Click(sender As Object, e As EventArgs) Handles btnCancelar.Click
-        Try
-            Response.Redirect("Parametrizacion.aspx")
         Catch ex As Exception
             lblError.Text = ex.Message
             lblError.Visible = True
@@ -316,14 +467,12 @@ Public Class Seguimiento
 
     Private Sub CargarArchivo_Click(sender As Object, e As EventArgs) Handles CargarArchivo.Click
         Try
-            Dim idMeta, fileName, filePat, pathCorto, arraySeguimiento As String
+            Dim fileName, filePat, pathCorto, arraySeguimiento As String
 
             ScriptManager.RegisterStartupScript(Me, GetType(Page), "modal", "abrirModalAdjutnosArch();", True)
-            If Request.QueryString("idMeta") = String.Empty Then
+            If meta.Text.Trim = String.Empty Then
                 alerta("Advertencia", "Debe seleccionar la meta", "info", "")
                 Exit Sub
-            Else
-                idMeta = Request.QueryString("idMeta")
             End If
 
             If idReport.Text = String.Empty Then
@@ -346,18 +495,18 @@ Public Class Seguimiento
 
                         filePat = Path.Combine(Request.PhysicalApplicationPath, "Evidencias\")
                         pathCorto &= "Evidencias\"
-                        If (Directory.Exists(filePat & idMeta & "-" & Session("pac"))) Then
-                            If (Directory.Exists(filePat & idMeta & "-" & Session("pac") & "\" & "txt")) Then
+                        If (Directory.Exists(filePat & meta.Text.Trim & "-" & Session("pac"))) Then
+                            If (Directory.Exists(filePat & meta.Text.Trim & "-" & Session("pac") & "\" & "txt")) Then
                             Else
                                 Directory.CreateDirectory(Path.Combine(filePat, "txt"))
                             End If
                         Else
-                            Directory.CreateDirectory(Path.Combine(filePat, idMeta & "-" & Session("pac")))
-                            Directory.CreateDirectory(Path.Combine(filePat & idMeta & "-" & Session("pac"), "txt"))
+                            Directory.CreateDirectory(Path.Combine(filePat, meta.Text.Trim & "-" & Session("pac")))
+                            Directory.CreateDirectory(Path.Combine(filePat & meta.Text.Trim & "-" & Session("pac"), "txt"))
                         End If
 
-                        filePat &= idMeta & "-" & Session("pac") & "\txt\"
-                        pathCorto &= idMeta & "-" & Session("pac") & "\txt\"
+                        filePat &= meta.Text.Trim & "-" & Session("pac") & "\txt\"
+                        pathCorto &= meta.Text.Trim & "-" & Session("pac") & "\txt\"
 
                         If (Directory.Exists(filePat & idReport.Text.Trim & "-" & Date.Now.ToString("dd-MM-yyyy"))) Then
                         Else
@@ -415,14 +564,12 @@ Public Class Seguimiento
 
     Private Sub CaragrImagen_Click(sender As Object, e As EventArgs) Handles CaragrImagen.Click
         Try
-            Dim idMeta, fileName, filePat, pathCorto, arraySeguimiento As String
+            Dim fileName, filePat, pathCorto, arraySeguimiento As String
 
             ScriptManager.RegisterStartupScript(Me, GetType(Page), "modal", "abrirModalAdjutnosImg();", True)
-            If Request.QueryString("idMeta") = String.Empty Then
+            If meta.Text.Trim = String.Empty Then
                 alerta("Debe seleccionar la meta", "", "info", "")
                 Exit Sub
-            Else
-                idMeta = Request.QueryString("idMeta")
             End If
             If idReport.Text = String.Empty Then
                 alerta("Advertencia", "Debe guardar primero el reporte y despues adjuntar las evidencias", "info", "")
@@ -443,18 +590,18 @@ Public Class Seguimiento
                        fileExt = ".IMG" Or fileExt = ".PNG" Or fileExt = ".JPG" Or fileExt = ".JPGE" Or fileExt = ".SVG" Then
                         filePat = Path.Combine(Request.PhysicalApplicationPath, "Evidencias\")
                         pathCorto &= "Evidencias\"
-                        If (Directory.Exists(filePat & idMeta & "-" & Session("pac"))) Then
-                            If (Directory.Exists(filePat & idMeta & "-" & Session("pac") & "\" & "img")) Then
+                        If (Directory.Exists(filePat & meta.Text.Trim & "-" & Session("pac"))) Then
+                            If (Directory.Exists(filePat & meta.Text.Trim & "-" & Session("pac") & "\" & "img")) Then
                             Else
-                                Directory.CreateDirectory(Path.Combine(filePat & idMeta & "-" & Session("pac"), "img"))
+                                Directory.CreateDirectory(Path.Combine(filePat & meta.Text.Trim & "-" & Session("pac"), "img"))
                             End If
                         Else
-                            Directory.CreateDirectory(Path.Combine(filePat, idMeta & "-" & Session("pac")))
-                            Directory.CreateDirectory(Path.Combine(filePat & idMeta & "-" & Session("pac"), "img"))
+                            Directory.CreateDirectory(Path.Combine(filePat, meta.Text.Trim & "-" & Session("pac")))
+                            Directory.CreateDirectory(Path.Combine(filePat & meta.Text.Trim & "-" & Session("pac"), "img"))
                         End If
 
-                        filePat &= idMeta & "-" & Session("pac") & "\img\"
-                        pathCorto &= idMeta & "-" & Session("pac") & "\img\"
+                        filePat &= meta.Text.Trim & "-" & Session("pac") & "\img\"
+                        pathCorto &= meta.Text.Trim & "-" & Session("pac") & "\img\"
 
                         If (Directory.Exists(filePat & idReport.Text.Trim & "-" & Date.Now.ToString("dd-MM-yyyy"))) Then
                         Else
@@ -510,65 +657,31 @@ Public Class Seguimiento
 #End Region
 
 #Region "Metodos - Funciones"
-    Public Sub cargarMetaAgrupado()
+    Public Sub cargarLineas()
         Try
-            Dim datat2 As DataTable
             Fila = Nothing
             Fila = parametrizacion.selectPacActivo
             If Fila IsNot Nothing Then
+                pac.Text = Fila("id")
                 DataT = Nothing
-                DataT = parametrizacion.selectLinea(Fila("id"))
+                DataT = parametrizacion.selectNiveles(pac.Text.Trim)
                 If DataT.Rows.Count > 0 Then
-                    For Each row As DataRow In DataT.Rows
-                        pnlMetas.Controls.Add(New LiteralControl("
-                            <div class=""col-md-12 col-xs-12 mt-4"">
-                                <div class=""card"">
-                                    <div class=""card-header"" id=""code-s" & row("code") & """>
-                                        <h5 class=""mb-0"">
-                                            <a data-toggle=""collapse"" href=""#code-" & row("code") & """ role=""button"" aria-expanded=""false"" aria-controls=""collapseExample"">
-                                               <b>" & row("code") & "." & row("name") & "</b><i class=""fa fa-arrow-down ml-3""></i>
-                                            </a>
-                                        </h5>
-                                    </div>
-                                    <div class=""collapse"" id=""code-" & row("code") & """>
-                                        <div class=""card-body"">
-                        "))
-
-                        datat2 = parametrizacion.selectLineaAgrupado(Fila("id"), row("code"))
-                        If datat2.Rows.Count > 0 Then
-                            For Each row2 As DataRow In datat2.Rows
-                                pnlMetas.Controls.Add(New LiteralControl("
-                                        <div class=""row mb-4"">
-                                            <div class=""col-9"">
-                                                <h5>" & row2("name") & "-" & row2("subactivity") & "</h5>
-                                            </div>   
-                                            <div class=""col-2"">
-                                                <a href=""Seguimiento.aspx?idMeta=" & row2("id") & """ class=""btn btn-primary"">Seguimiento</a>                                            
-                                            </div>
-                                            <div class=""col-1"">
-                                                <a href=""Seguimiento.aspx?idMeta=" & row2("id") & """ class=""btn btn-primary"">Ver</a> 
-                                            </div>
-                                        </div>
-                                    "))
-                            Next
-
-                        End If
-
-                        pnlMetas.Controls.Add(New LiteralControl("
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>"))
-                    Next
-
+                    cmbLineas.Items.Clear()
+                    cmbLineas.DataTextField = "name"
+                    cmbLineas.DataValueField = "code"
+                    cmbLineas.DataSource = DataT
+                    cmbLineas.DataBind()
+                    cmbLineas.Items.Insert(0, New ListItem("---Seleccione---", ""))
                 End If
             End If
+
         Catch ex As Exception
             lblError.Text = ex.Message
             lblError.Visible = True
         End Try
-
     End Sub
+
+
     Public Sub cargarMeta(ByVal idMeta As String)
         Try
             Fila = Nothing
@@ -616,15 +729,22 @@ Public Class Seguimiento
     End Sub
 
     Sub pestaña(index As Integer)
+        navMetas.Attributes.Add("class", "")
         navActividades.Attributes.Add("class", "")
         navEvidencias.Attributes.Add("class", "")
 
         Select Case index
             Case 1
-                navActividades.Attributes.Add("class", "nav-link active")
+                navMetas.Attributes.Add("class", "nav-link active")
+                navActividades.Attributes.Add("class", "nav-link")
                 navEvidencias.Attributes.Add("class", "nav-link")
             Case 2
+                navActividades.Attributes.Add("class", "nav-link active")
+                navMetas.Attributes.Add("class", "nav-link")
+                navEvidencias.Attributes.Add("class", "nav-link ")
+            Case 3
                 navEvidencias.Attributes.Add("class", "nav-link active")
+                navMetas.Attributes.Add("class", "nav-link")
                 navActividades.Attributes.Add("class", "nav-link")
         End Select
     End Sub

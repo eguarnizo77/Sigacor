@@ -6,15 +6,6 @@ Diagrama: https://dbdiagram.io/d/60479d46fcdcb6230b235111
 Git: https://github.com/eguarnizo77/Sigacor
 
 
-select * from(
-(select con.name as linea, '' as programa, '' as actividad 
-from contents con 
-where con.pac_id = 14 and con.level_id = 1)
-union
-(select '' as linea, con.name as programa, '' as actividad 
-from contents con 
-where con.pac_id = 14 and con.level_id = 2)
-union
-(select '' as linea, '' as programa, con.name as actividad 
-from contents con 
-where con.pac_id = 14 and con.level_id = 3) )
+Comdepndncs
+
+COMDEPNDNC
