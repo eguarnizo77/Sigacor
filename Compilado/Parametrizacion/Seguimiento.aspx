@@ -486,6 +486,10 @@
     <asp:Button ID="CaragrImagen" runat="server" class="d-none" />
 
     <script>
+        $(window).on('load', function () {
+            $('#3').addClass("MnuActive");
+        });
+
         function abrirModal() {
             $(window).on('load', function () {
                 $('#mdlVisualizador').modal('show');

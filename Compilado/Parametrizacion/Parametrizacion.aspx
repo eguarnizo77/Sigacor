@@ -7,6 +7,16 @@
     <script src="../Componentes/vendor/jquery/jquery.min.js"></script>
 
     <div class="container">
+
+        <div class="row">
+            <div class="col-5">
+                <h3>PARAMETRIZACIÓN DEL PAC</h3>
+            </div>
+            <div class="col-7">
+                <hr style="border-top: 3px solid rgba(0, 0, 0, .1);" />
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-12 text-right">
                 <a class="btn btn-success btn-icon-split" href="NuevoRegistro.aspx">
@@ -26,7 +36,7 @@
 
                 <div class="row mt-4">
                     <div class="col-12 text-left" style="overflow-x: auto; overflow-y: auto;">
-                        <asp:GridView ID="tblPac" runat="server" CssClass="sem table" Width="100%" AutoGenerateColumns="False">
+                        <asp:GridView ID="tblPac" runat="server" CssClass="table" Width="100%" AutoGenerateColumns="False">
                             <Columns>
                                 <asp:BoundField DataField="id" HeaderText="Código" />
                                 <asp:BoundField DataField="name" HeaderText="Nombre" />
@@ -159,6 +169,9 @@
     </style>
 
     <script>
+        $(window).on('load', function () {            
+            $('#1').addClass("MnuActive");
+        });
 
         function abrirModal() {
             $(window).on('load', function () {

@@ -12645,3 +12645,11 @@ body.sidebar-toggled footer.sticky-footer {
     background: #5c588b;
     color: white;
 }
+
+.MnuActive {
+    color: white !important;
+    background: #5C588B;
+}
+.MnuActive i {
+    color: white !important;
+}
