@@ -81,6 +81,7 @@
     });
 
     $('#contenedor2_tblPac').DataTable(script);
+    //$('#contenedor2_tblPlanAccion').DataTable(script);
 
     
 });

@@ -15,7 +15,7 @@
             For Each row As DataRow In DataT1.Rows
                 pnlMenu.Controls.Add(New LiteralControl("<li class=""nav-item"">"))
                 If Not IsDBNull(row("route")) Then
-                    pnlMenu.Controls.Add(New LiteralControl("<a Class=""nav-link nav-link-Curvo"" href=" & row("route") & ">
+                    pnlMenu.Controls.Add(New LiteralControl("<a Class=""nav-link nav-link-Curvo"" id=""" & row("orden") & """ href=" & row("route") & ">
                                                             <i Class=""" & row("icon") & """></i>
                                                             <span> " & row("name").ToString() & "</span></a>"))
                 Else

@@ -157,6 +157,12 @@ Public Class clParametrizacion
 
         Return Data.OpenData(QRY)
     End Function
+    Public Function selectContentsFiltro(ByVal pac_id As String, ByVal code As String) As DataTable
+
+        QRY = "select * from contents where pac_id = " & pac_id & " and state = 'A' and code like '" & code & "%' order by code"
+
+        Return Data.OpenData(QRY)
+    End Function
     Public Function selectContents(ByVal pac_id As String) As DataTable
 
         QRY = "select * from contents where pac_id = " & pac_id & " and state = 'A' order by code"
@@ -243,6 +249,13 @@ Public Class clParametrizacion
         QRY = "select * from goals where pac_id = " & pac_id & " and id = " & id & " and state = 'A' "
 
         Return Data.OpenRow(QRY)
+    End Function
+
+    Public Function selectGoalsFiltro(ByVal pac_id As String, ByVal subactivity As String) As DataTable
+
+        QRY = "select * from goals where state = 'A' and subactivity like '" & subactivity & "%' and pac_id = " & pac_id
+
+        Return Data.OpenData(QRY)
     End Function
 
     Public Function selectGoalsFila(ByVal id As String) As DataRow

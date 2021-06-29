@@ -4,6 +4,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="contenedor2" runat="server">
+    <script src="../Componentes/vendor/jquery/jquery.min.js"></script>
 
     <div class="container">
         <div class="row">
@@ -144,6 +145,9 @@
 
 
     <script>
+        $(window).on('load', function () {            
+            $('#2').addClass("MnuActive");
+        });
         window.onload = function () {
             var pos = window.name || 0;
             window.scrollTo(0, pos);
